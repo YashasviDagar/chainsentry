@@ -50,7 +50,8 @@ def test_offline_skips_network_checks(demo_dir):
 
 def test_skip_option(demo_dir, client):
     result = scan(demo_dir, ScanOptions(skip=frozenset({"osv"})), client=client)
-    assert result.checks == []
+    assert "osv" not in result.checks
+    assert "typosquat" in result.checks  # offline check still runs
 
 
 @respx.mock
