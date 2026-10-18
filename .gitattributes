@@ -1,0 +1,7 @@
+# Normalise line endings so the repo looks the same on Windows, macOS and Linux.
+# Without this, Windows checkouts convert LF -> CRLF and diffs become noisy.
+* text=auto eol=lf
+
+# Windows batch files genuinely need CRLF.
+*.bat text eol=crlf
+*.cmd text eol=crlf
