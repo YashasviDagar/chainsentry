@@ -219,13 +219,39 @@ Markdown report, writes the job summary, uploads the JSON report and SBOM as
 artifacts, and fails the check when the threshold is exceeded. See
 [action.yml](action.yml) for all inputs and outputs.
 
-## Dashboard and batch mode
+## Dashboard
 
-* `dashboard/index.html` is a single static page. Open it in a browser and
-  drop a `report.json` onto it. Nothing is uploaded anywhere.
-* `scripts/batch_scan.py` scans many public GitHub repositories (manifests
-  only, no cloning) and aggregates statistics, e.g. "scanned 100 repos,
-  N had at least one critical vulnerability".
+[`dashboard/index.html`](dashboard/index.html) is a single static page with
+no dependencies and no build step. Open it in a browser and drop a
+`report.json` onto it. The file is read locally and never uploaded.
+
+```bash
+python -m http.server 8000        # then open http://localhost:8000/dashboard/ and click "Load sample"
+```
+
+It shows the project score ring, severity breakdown, and a sortable,
+filterable package table. Each row expands to show its score breakdown,
+vulnerabilities (linked to OSV) and findings. All report text is rendered as
+text, never HTML, and a Content-Security-Policy blocks any outbound requests.
+
+## Batch mode (aggregate statistics)
+
+Scan many public GitHub repositories (root manifests only, no cloning) and
+aggregate the results:
+
+```bash
+set GITHUB_TOKEN=<token>          # Windows; export GITHUB_TOKEN=... elsewhere (raises the limit from 60 to 5,000 req/h)
+python scripts/batch_scan.py --search "language:javascript stars:>5000" --limit 100 --skip-health
+python scripts/batch_scan.py --repos scripts/repos-sample.txt --include-dev
+```
+
+Results go to `batch-results/`: one JSON report per repository, plus
+`stats.json`, `stats.csv` and `SUMMARY.md` (repositories scanned, dependencies
+analysed, % of repos with known/critical vulnerabilities, most common
+vulnerable packages and advisories). An interrupted run resumes where it
+stopped. When you quote these numbers, also state the sample (how the repos
+were chosen) and the "not checked" count, which covers dependencies without
+an exact version.
 
 ## Testing
 
