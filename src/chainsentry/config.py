@@ -113,3 +113,20 @@ def cache_dir() -> Path:
         return Path(os.environ["LOCALAPPDATA"]) / "chainsentry" / "cache"
     base = os.environ.get("XDG_CACHE_HOME") or str(Path.home() / ".cache")
     return Path(base) / "chainsentry"
+
+
+# ---------------------------------------------------------------------------
+# Package health (Phase 4)
+# ---------------------------------------------------------------------------
+
+#: No release for this long -> "abandoned": security fixes are unlikely.
+ABANDONED_DAYS: int = 730
+#: Package first published less than this long ago -> "very new". Most
+#: malicious packages are reported and removed within days of publication.
+NEW_PACKAGE_DAYS: int = 30
+#: The *installed version* was published less than this long ago. Hijacked
+#: maintainer accounts push fresh malicious versions (ua-parser-js, 2021).
+NEW_VERSION_DAYS: int = 7
+#: npm packages with this many maintainers or fewer are flagged
+#: (one compromised account = full control of the package).
+SINGLE_MAINTAINER_MAX: int = 1

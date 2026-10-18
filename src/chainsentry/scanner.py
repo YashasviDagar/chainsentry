@@ -30,6 +30,7 @@ from pathlib import Path
 
 from chainsentry import __version__, config
 from chainsentry.checks.base import Check
+from chainsentry.checks.health import HealthCheck
 from chainsentry.checks.osv import OsvCheck
 from chainsentry.checks.typosquat import TyposquatCheck
 from chainsentry.models import Dependency, PackageReport, ScanResult
@@ -60,6 +61,8 @@ class ScanOptions:
     #: SECURITY/PRIVACY: excluded names are never sent to any public API,
     #: which matters for internal package names.
     exclude: tuple[str, ...] = ()
+    #: Run registry health checks only for direct dependencies (faster on big lockfiles).
+    health_direct_only: bool = False
 
 
 def open_cache(use_cache: bool) -> Cache:
@@ -73,9 +76,13 @@ def open_cache(use_cache: bool) -> Cache:
         return Cache(None)
 
 
-def build_checks(client: HttpClient) -> list[Check]:
+def build_checks(client: HttpClient, registry: RegistryClient, options: ScanOptions) -> list[Check]:
     """All checks, in the order they run."""
-    return [OsvCheck(client), TyposquatCheck()]
+    return [
+        OsvCheck(client),
+        TyposquatCheck(),
+        HealthCheck(registry, direct_only=options.health_direct_only),
+    ]
 
 
 def scan(
@@ -107,12 +114,13 @@ def scan(
 
     errors: list[str] = []
     ran: list[str] = []
+    registry = RegistryClient(client)
     try:
         if options.resolve and not options.offline:
-            errors += Resolver(RegistryClient(client)).resolve(reports)
+            errors += Resolver(registry).resolve(reports)
             reports = _merge_duplicates(reports)
 
-        for check in build_checks(client):
+        for check in build_checks(client, registry, options):
             if check.name in options.skip:
                 continue
             if check.needs_network and options.offline:

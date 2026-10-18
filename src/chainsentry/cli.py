@@ -44,7 +44,7 @@ from chainsentry.reporters import table as table_reporter
 from chainsentry.scanner import CACHE_FILE, ScanOptions, open_cache, scan
 
 #: Check names accepted by --skip.
-CHECK_NAMES = ("osv", "typosquat")
+CHECK_NAMES = ("osv", "typosquat", "health")
 
 EXIT_OK = 0
 EXIT_RISK = 1
@@ -132,6 +132,11 @@ def _add_scan_arguments(cmd: argparse.ArgumentParser) -> None:
         "excluded names are never sent to public APIs",
     )
     cmd.add_argument(
+        "--health-direct-only",
+        action="store_true",
+        help="run registry health checks only for direct dependencies (faster)",
+    )
+    cmd.add_argument(
         "--offline", action="store_true", help="no network access; only offline checks run"
     )
     cmd.add_argument("--no-cache", action="store_true", help="do not read or write the HTTP cache")
@@ -172,6 +177,7 @@ def options_from_args(args: argparse.Namespace) -> ScanOptions:
         use_cache=not args.no_cache,
         skip=frozenset(args.skip),
         exclude=tuple(args.exclude),
+        health_direct_only=args.health_direct_only,
     )
 
 
