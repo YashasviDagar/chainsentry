@@ -1,0 +1,417 @@
+<!doctype html>
+<!--
+  ChainSentry dashboard - a single static page that visualises a report.json.
+
+  How to use:
+    * open this file in a browser and drop a report.json onto it, or
+    * serve the repository (python -m http.server) and click "Load sample".
+
+  Design decisions:
+    * One self-contained file, no build step, no libraries: it can be opened
+      from disk, attached to an email, or hosted on GitHub Pages.
+    * The report never leaves the browser (FileReader, no uploads).
+
+  Security:
+    * Report content is UNTRUSTED (package names and advisory text come from
+      manifests, registries and OSV). Everything is rendered with
+      textContent / createElement - never innerHTML - so a malicious summary
+      like "<img src=x onerror=...>" is shown as text, not executed.
+    * Links are only created for http(s) URLs; "javascript:" URLs are dropped.
+    * The Content-Security-Policy below forbids loading anything from other
+      origins (connect/img/font/frame), so even a bug could not exfiltrate
+      data. Inline script/style are allowed because this is a single file.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy"
+      content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'self'; img-src 'self' data:; base-uri 'none'; form-action 'none'">
+<title>ChainSentry Dashboard</title>
+<style>
+  :root {
+    --bg: #f6f7f9; --panel: #ffffff; --text: #1d232b; --muted: #5d6875; --border: #dde1e6;
+    --accent: #2f6fde; --critical: #c62828; --high: #e8590c; --medium: #d4a106; --low: #2e8b57;
+    --unknown: #8a94a0; --row-hover: #f0f4fa;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #12161c; --panel: #1b2129; --text: #e6e9ed; --muted: #9aa5b1; --border: #2c3440;
+      --accent: #6aa0ff; --row-hover: #222a35;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+         font: 15px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  header { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between;
+           padding: 16px 24px; background: var(--panel); border-bottom: 1px solid var(--border); }
+  header h1 { margin: 0; font-size: 20px; }
+  header h1 span { color: var(--muted); font-weight: 400; font-size: 14px; margin-left: 8px; }
+  main { max-width: 1200px; margin: 0 auto; padding: 24px 16px 48px; }
+  button, .file-label { font: inherit; padding: 7px 14px; border-radius: 6px; cursor: pointer;
+           border: 1px solid var(--border); background: var(--panel); color: var(--text); }
+  button.primary, .file-label { background: var(--accent); border-color: var(--accent); color: #fff; }
+  input[type=file] { display: none; }
+  #drop { border: 2px dashed var(--border); border-radius: 12px; padding: 48px 16px; text-align: center;
+          color: var(--muted); background: var(--panel); }
+  #drop.over { border-color: var(--accent); color: var(--accent); }
+  #error { color: var(--critical); margin: 12px 0; }
+  .grid { display: grid; grid-template-columns: 220px repeat(auto-fit, minmax(150px, 1fr)); gap: 16px; }
+  @media (max-width: 640px) { .grid { grid-template-columns: 1fr 1fr; } .ring-card { grid-column: span 2; } }
+  .card { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
+  .card .label { color: var(--muted); font-size: 13px; }
+  .card .value { font-size: 28px; font-weight: 600; }
+  .ring-card { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+  .band { display: inline-block; padding: 1px 8px; border-radius: 999px; font-size: 12px; font-weight: 600;
+          color: #fff; letter-spacing: .02em; }
+  .b-CRITICAL { background: var(--critical); } .b-HIGH { background: var(--high); }
+  .b-MEDIUM { background: var(--medium); } .b-LOW { background: var(--low); } .b-UNKNOWN { background: var(--unknown); }
+  .bar { display: flex; height: 12px; border-radius: 6px; overflow: hidden; background: var(--border); margin-top: 8px; }
+  .bar div { height: 100%; }
+  .legend { display: flex; flex-wrap: wrap; gap: 10px; font-size: 13px; color: var(--muted); margin-top: 6px; }
+  h2 { font-size: 17px; margin: 28px 0 10px; }
+  .filters { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 10px; }
+  .filters input[type=search], .filters select { font: inherit; padding: 6px 10px; border-radius: 6px;
+           border: 1px solid var(--border); background: var(--panel); color: var(--text); }
+  .chip { padding: 4px 10px; border-radius: 999px; font-size: 13px; }
+  .chip[aria-pressed=true] { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .table-wrap { overflow-x: auto; background: var(--panel); border: 1px solid var(--border); border-radius: 12px; }
+  table { border-collapse: collapse; width: 100%; min-width: 760px; }
+  th, td { padding: 9px 12px; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+  th { font-size: 13px; color: var(--muted); font-weight: 600; cursor: pointer; user-select: none; white-space: nowrap; }
+  th[aria-sort=ascending]::after { content: " ▲"; } th[aria-sort=descending]::after { content: " ▼"; }
+  tbody tr.pkg:hover { background: var(--row-hover); }
+  td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  .score { font-weight: 700; }
+  .expand { border: none; background: none; color: var(--accent); padding: 0 4px; }
+  tr.details td { background: var(--bg); }
+  .details h4 { margin: 8px 0 4px; font-size: 13px; color: var(--muted); }
+  .details ul { margin: 0; padding-left: 18px; }
+  .details li { margin: 3px 0; }
+  code { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 13px; }
+  .muted { color: var(--muted); }
+  a { color: var(--accent); }
+  footer { color: var(--muted); font-size: 13px; text-align: center; margin-top: 32px; }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<header>
+  <h1>ChainSentry <span>dependency risk dashboard</span></h1>
+  <div>
+    <label class="file-label">Open report.json<input id="file" type="file" accept=".json,application/json"></label>
+    <button id="sample" type="button">Load sample</button>
+  </div>
+</header>
+
+<main>
+  <div id="drop">Drop a <code>report.json</code> here (from <code>chainsentry scan -f json</code>).<br>
+    <span class="muted">Nothing is uploaded: the file is read locally by your browser.</span></div>
+  <div id="error" role="alert"></div>
+
+  <section id="report" hidden>
+    <p class="muted" id="meta"></p>
+    <div class="grid" id="cards"></div>
+
+    <h2>Vulnerabilities by severity</h2>
+    <div class="card"><div class="bar" id="sevbar"></div><div class="legend" id="sevlegend"></div></div>
+
+    <h2>Packages</h2>
+    <div class="filters">
+      <input id="search" type="search" placeholder="Search package…" aria-label="Search package">
+      <span id="bandchips"></span>
+      <select id="eco" aria-label="Ecosystem"><option value="">All ecosystems</option></select>
+      <label><input id="onlyrisky" type="checkbox" checked> Only packages with issues</label>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr id="thead"></tr></thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+    <p class="muted" id="count"></p>
+
+    <section id="notes" hidden>
+      <h2>Warnings and incomplete checks</h2>
+      <div class="card"><ul id="noteslist"></ul></div>
+    </section>
+  </section>
+  <footer>ChainSentry · scores explained in docs/SCORING.md</footer>
+</main>
+
+<script>
+"use strict";
+
+const SEVERITIES = ["CRITICAL", "HIGH", "MEDIUM", "LOW", "UNKNOWN"];
+const COLORS = { CRITICAL: "var(--critical)", HIGH: "var(--high)", MEDIUM: "var(--medium)", LOW: "var(--low)", UNKNOWN: "var(--unknown)" };
+const state = { report: null, sortKey: "score", sortDir: -1, bands: new Set(), expanded: new Set() };
+
+// ---- tiny DOM helper: strings become TEXT nodes, never HTML -----------------
+function el(tag, attrs, ...children) {
+  const node = document.createElement(tag);
+  for (const [key, value] of Object.entries(attrs || {})) {
+    if (value === null || value === undefined || value === false) continue;
+    if (key === "class") node.className = value;
+    else if (key.startsWith("on")) node.addEventListener(key.slice(2), value);
+    else node.setAttribute(key, value === true ? "" : String(value));
+  }
+  for (const child of children.flat()) {
+    if (child === null || child === undefined || child === false) continue;
+    node.append(child instanceof Node ? child : document.createTextNode(String(child)));
+  }
+  return node;
+}
+
+// Only http(s) links; anything else (javascript:, data:) is rendered as text.
+function safeLink(url, text) {
+  try {
+    const parsed = new URL(url);
+    if (parsed.protocol === "https:" || parsed.protocol === "http:") {
+      return el("a", { href: parsed.href, target: "_blank", rel: "noopener noreferrer" }, text || parsed.href);
+    }
+  } catch (e) { /* not a URL */ }
+  return document.createTextNode(text || String(url));
+}
+
+function osvLink(id) {
+  return safeLink("https://osv.dev/vulnerability/" + encodeURIComponent(id), id);
+}
+
+function band(name) {
+  const safe = SEVERITIES.includes(name) ? name : "UNKNOWN";
+  return el("span", { class: "band b-" + safe }, safe);
+}
+
+// ---- loading ---------------------------------------------------------------
+function showError(message) {
+  document.getElementById("error").textContent = message;
+}
+
+function load(text, source) {
+  let data;
+  try { data = JSON.parse(text); } catch (e) { showError("Not valid JSON: " + e.message); return; }
+  if (!data || typeof data !== "object" || !String(data.schema_version || "").startsWith("1.")
+      || !Array.isArray(data.packages) || !data.summary) {
+    showError("This does not look like a ChainSentry report (expected schema_version 1.x).");
+    return;
+  }
+  showError("");
+  state.report = data;
+  state.expanded.clear();
+  document.getElementById("drop").hidden = true;
+  document.getElementById("report").hidden = false;
+  document.title = "ChainSentry – " + (data.scan && data.scan.target || source);
+  renderAll();
+}
+
+function readFile(file) {
+  if (!file) return;
+  if (file.size > 100 * 1024 * 1024) { showError("File is larger than 100 MB."); return; }
+  const reader = new FileReader();
+  reader.onload = () => load(reader.result, file.name);
+  reader.onerror = () => showError("Could not read the file.");
+  reader.readAsText(file);
+}
+
+document.getElementById("file").addEventListener("change", (e) => readFile(e.target.files[0]));
+const drop = document.getElementById("drop");
+for (const target of [drop, document.body]) {
+  target.addEventListener("dragover", (e) => { e.preventDefault(); drop.classList.add("over"); });
+  target.addEventListener("dragleave", () => drop.classList.remove("over"));
+  target.addEventListener("drop", (e) => {
+    e.preventDefault(); drop.classList.remove("over");
+    readFile(e.dataTransfer.files[0]);
+  });
+}
+document.getElementById("sample").addEventListener("click", async () => {
+  try {
+    const response = await fetch("../docs/sample-output/report.json");
+    if (!response.ok) throw new Error("HTTP " + response.status);
+    load(await response.text(), "sample");
+  } catch (e) {
+    showError("Could not load the sample (" + e.message + "). Serve the repository with " +
+              "`python -m http.server` and open /dashboard/, or use 'Open report.json'.");
+  }
+});
+
+// ---- rendering --------------------------------------------------------------
+function renderAll() {
+  renderSummary();
+  renderFilters();
+  renderTable();
+  renderNotes();
+}
+
+function scoreRing(score, bandName) {
+  const ns = "http://www.w3.org/2000/svg";
+  const svg = document.createElementNS(ns, "svg");
+  svg.setAttribute("viewBox", "0 0 120 120");
+  svg.setAttribute("width", "130");
+  svg.setAttribute("role", "img");
+  svg.setAttribute("aria-label", "Project risk " + score + " of 100");
+  const circumference = 2 * Math.PI * 50;
+  const track = document.createElementNS(ns, "circle");
+  const arc = document.createElementNS(ns, "circle");
+  for (const c of [track, arc]) {
+    c.setAttribute("cx", "60"); c.setAttribute("cy", "60"); c.setAttribute("r", "50");
+    c.setAttribute("fill", "none"); c.setAttribute("stroke-width", "12");
+  }
+  track.setAttribute("stroke", "var(--border)");
+  arc.setAttribute("stroke", COLORS[bandName] || COLORS.UNKNOWN);
+  arc.setAttribute("stroke-linecap", "round");
+  arc.setAttribute("stroke-dasharray", `${circumference * Math.min(score, 100) / 100} ${circumference}`);
+  arc.setAttribute("transform", "rotate(-90 60 60)");
+  const label = document.createElementNS(ns, "text");
+  label.setAttribute("x", "60"); label.setAttribute("y", "68");
+  label.setAttribute("text-anchor", "middle"); label.setAttribute("font-size", "28");
+  label.setAttribute("font-weight", "700"); label.setAttribute("fill", "currentColor");
+  label.textContent = String(score);
+  svg.append(track, arc, label);
+  return svg;
+}
+
+function renderSummary() {
+  const { summary, scan, tool } = state.report;
+  const num = (v) => Number(v || 0).toLocaleString();
+  document.getElementById("meta").textContent =
+    `${scan.target} · ${(scan.files || []).join(", ")} · scanned ${scan.scanned_at} · ` +
+    `checks: ${(scan.checks || []).join(", ") || "none"} · ChainSentry ${tool && tool.version}`;
+
+  const cards = document.getElementById("cards");
+  cards.replaceChildren(
+    el("div", { class: "card ring-card" }, scoreRing(Number(summary.project_score) || 0, summary.project_band),
+       el("div", null, "Project risk ", band(summary.project_band))),
+    card("Packages", num(summary.packages), `${num(summary.direct)} direct`),
+    card("Known vulnerabilities", num(summary.vulnerabilities), `in ${num(summary.vulnerable_packages)} package(s)`),
+    card("Fix available", num(summary.fixable_vulnerabilities), "vulnerabilities with a fixed version"),
+    card("Other findings", num(Object.values(summary.findings_by_code || {}).reduce((a, b) => a + b, 0)),
+         Object.keys(summary.findings_by_code || {}).slice(0, 3).join(", ") || "none"),
+    card("Not checked", num(summary.unchecked), "no exact version"),
+  );
+
+  const bySev = summary.vulnerabilities_by_severity || {};
+  const total = Object.values(bySev).reduce((a, b) => a + b, 0);
+  const bar = document.getElementById("sevbar");
+  const legend = document.getElementById("sevlegend");
+  bar.replaceChildren(...SEVERITIES.filter((s) => bySev[s]).map((s) =>
+    el("div", { style: `width:${100 * bySev[s] / total}%;background:${COLORS[s]}`, title: `${s}: ${bySev[s]}` })));
+  legend.replaceChildren(...(total ? SEVERITIES.filter((s) => bySev[s]).map((s) => el("span", null, band(s), " ", bySev[s]))
+                                   : [el("span", null, "No known vulnerabilities.")]));
+}
+
+function card(label, value, sub) {
+  return el("div", { class: "card" }, el("div", { class: "label" }, label),
+            el("div", { class: "value" }, value), el("div", { class: "muted" }, sub));
+}
+
+function renderFilters() {
+  const chips = document.getElementById("bandchips");
+  chips.replaceChildren(...["CRITICAL", "HIGH", "MEDIUM", "LOW"].map((b) =>
+    el("button", { type: "button", class: "chip", "aria-pressed": String(state.bands.has(b)),
+                   onclick: () => { state.bands.has(b) ? state.bands.delete(b) : state.bands.add(b); renderFilters(); renderTable(); } }, b)));
+  const eco = document.getElementById("eco");
+  const current = eco.value;
+  const ecosystems = [...new Set(state.report.packages.map((p) => p.ecosystem))].sort();
+  eco.replaceChildren(el("option", { value: "" }, "All ecosystems"), ...ecosystems.map((e) => el("option", { value: e }, e)));
+  eco.value = ecosystems.includes(current) ? current : "";
+}
+
+const COLUMNS = [
+  { key: "score", label: "Score", num: true },
+  { key: "name", label: "Package" },
+  { key: "version", label: "Version" },
+  { key: "ecosystem", label: "Ecosystem" },
+  { key: "type", label: "Type" },
+  { key: "vulns", label: "Vulns", num: true },
+  { key: "issues", label: "Issues" },
+];
+
+function sortValue(p, key) {
+  switch (key) {
+    case "vulns": return p.vulnerabilities.length;
+    case "type": return (p.direct ? "direct" : "transitive") + (p.dev ? " dev" : "");
+    case "issues": return p.findings.map((f) => f.code).join(",");
+    case "version": return p.version || p.spec || "";
+    default: return p[key];
+  }
+}
+
+function filteredPackages() {
+  const query = document.getElementById("search").value.trim().toLowerCase();
+  const eco = document.getElementById("eco").value;
+  const onlyRisky = document.getElementById("onlyrisky").checked;
+  return state.report.packages.filter((p) =>
+    (!query || String(p.name).toLowerCase().includes(query)) &&
+    (!eco || p.ecosystem === eco) &&
+    (!onlyRisky || p.score > 0) &&
+    (state.bands.size === 0 || state.bands.has(p.band)));
+}
+
+function renderTable() {
+  const head = document.getElementById("thead");
+  head.replaceChildren(el("th", { "aria-label": "Expand" }), ...COLUMNS.map((c) =>
+    el("th", { "aria-sort": state.sortKey === c.key ? (state.sortDir < 0 ? "descending" : "ascending") : null,
+               onclick: () => { state.sortDir = state.sortKey === c.key ? -state.sortDir : (c.num ? -1 : 1); state.sortKey = c.key; renderTable(); } },
+       c.label)));
+
+  const rows = filteredPackages().sort((a, b) => {
+    const x = sortValue(a, state.sortKey), y = sortValue(b, state.sortKey);
+    return (x > y ? 1 : x < y ? -1 : 0) * state.sortDir || String(a.name).localeCompare(String(b.name));
+  });
+
+  const body = document.getElementById("tbody");
+  body.replaceChildren(...rows.flatMap((p) => {
+    const id = `${p.ecosystem}:${p.name}@${p.version}`;
+    const open = state.expanded.has(id);
+    const row = el("tr", { class: "pkg" },
+      el("td", null, el("button", { type: "button", class: "expand", "aria-expanded": String(open),
+                                    "aria-label": "Details for " + p.name,
+                                    onclick: () => { open ? state.expanded.delete(id) : state.expanded.add(id); renderTable(); } }, open ? "▾" : "▸")),
+      el("td", { class: "num" }, el("span", { class: "score", style: `color:${COLORS[p.band] || COLORS.UNKNOWN}` }, p.score)),
+      el("td", null, el("code", null, p.name)),
+      el("td", null, p.version || el("span", { class: "muted" }, p.spec || "?"), p.resolved ? el("span", { class: "muted" }, " (resolved)") : null),
+      el("td", null, p.ecosystem),
+      el("td", null, sortValue(p, "type")),
+      el("td", { class: "num" }, p.vulnerabilities.length || "–"),
+      el("td", null, p.findings.map((f) => f.code).join(", ") || el("span", { class: "muted" }, "–")));
+    return open ? [row, detailsRow(p)] : [row];
+  }));
+  document.getElementById("count").textContent = `${rows.length} of ${state.report.packages.length} packages shown`;
+}
+
+function detailsRow(p) {
+  const parts = [];
+  parts.push(el("div", null, el("span", { class: "muted" }, "purl: "), el("code", null, p.purl),
+                el("span", { class: "muted" }, " · source: "), p.source_file));
+  if (p.score_breakdown.length) {
+    parts.push(el("h4", null, `Score ${p.score} = `),
+      el("ul", null, p.score_breakdown.map((c) => el("li", null, `+${c.points} `, c.reason))));
+  }
+  if (p.vulnerabilities.length) {
+    parts.push(el("h4", null, "Vulnerabilities"), el("ul", null, p.vulnerabilities.map((v) =>
+      el("li", null, band(v.severity), " ", osvLink(v.id),
+         v.aliases.length ? ` (${v.aliases.join(", ")})` : "",
+         v.cvss_score !== null ? ` · CVSS ${v.cvss_score}` : "",
+         " · ", v.summary,
+         " · fixed in: ", v.fixed_versions.join(", ") || "no fix yet"))));
+  }
+  if (p.findings.length) {
+    parts.push(el("h4", null, "Findings"), el("ul", null, p.findings.map((f) =>
+      el("li", null, band(f.severity), " ", el("code", null, f.code), " ", f.message))));
+  }
+  return el("tr", { class: "details" }, el("td", { colspan: COLUMNS.length + 1 }, el("div", { class: "details" }, parts)));
+}
+
+function renderNotes() {
+  const scan = state.report.scan;
+  const notes = [...(scan.errors || []).map((e) => "incomplete: " + e), ...(scan.warnings || [])];
+  document.getElementById("notes").hidden = notes.length === 0;
+  document.getElementById("noteslist").replaceChildren(...notes.map((n) => el("li", null, n)));
+}
+
+for (const id of ["search", "eco", "onlyrisky"]) {
+  document.getElementById(id).addEventListener("input", () => state.report && renderTable());
+}
+</script>
+</body>
+</html>

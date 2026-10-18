@@ -27,3 +27,7 @@ chainsentry-report/
 .idea/
 .DS_Store
 Thumbs.db
+batch-results/
+
+# Local Claude Code / editor tooling
+.claude/

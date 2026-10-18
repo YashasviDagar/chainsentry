@@ -3,7 +3,7 @@
 > Dependency & supply-chain risk scanner (CLI + GitHub Action).
 > This document is the roadmap for the whole project. Every phase lists **what**
 > gets built, **why** it is built that way, and **what to study** alongside it.
-> Status: **approved** — built one phase at a time.
+> Status: **complete**: all phases (0–7) built, tested and merged into `main`. See §11 for how the build differed from this plan.
 
 ---
 
@@ -411,3 +411,11 @@ ChainSentry never runs `npm install`/`pip install` on the scanned project, never
 1. **Name:** the tool, package and CLI command are all **ChainSentry** / `chainsentry`.
 2. **Branch-per-phase**, merged into `main` with `--no-ff` once a phase is approved.
 3. **No GitHub remote for now.** Nothing is pushed; revisit before Phase 6 (the Action needs a repo to run on).
+
+## 11. Deviations from the plan (recorded during the build)
+* **Scoring weights:** vulnerability points were raised to CRITICAL 75 / HIGH 50 / MEDIUM 25, so a package's band is never below its worst vulnerability. With the original 60/40/20, Django 3.2.0 (six critical CVEs) only rated HIGH and `--fail-on critical` passed. Codes `VERSION_NOT_IN_REGISTRY` (25), `NPM_ALIAS` (5) and `MISSING_INTEGRITY` (5) were added.
+* **Shared registry layer:** `registry.py` caches a compact `PackageInfo` instead of the raw multi-MB npm packument. It is shared by `--resolve` and the health check.
+* **Extra modules:** `scanner.py` options `--exclude` (keeps internal names away from public APIs) and `--health-direct-only`; `github.py` plus the `chainsentry github-comment` command for the Action; `batch.py` (testable logic) behind `scripts/batch_scan.py`.
+* **Peer dependencies** are not listed, since they are installed by the consuming project.
+* **Dashboard:** a single HTML file with inline CSS/JS, so it works from disk. A CSP blocks all cross-origin requests.
+* **Dogfooding workflow:** scans the demo fixture, because this repo's own `pyproject.toml` is not a supported manifest yet.

@@ -1,0 +1,47 @@
+# Sample list for scripts/batch_scan.py - popular public repositories that
+# (at the time of writing) keep npm or pip manifests in their root folder.
+# One owner/name per line; lines starting with '#' are ignored.
+# Repositories without supported root manifests are counted separately.
+#
+# --- npm ---
+axios/axios
+socketio/socket.io
+nestjs/nest
+typeorm/typeorm
+mochajs/mocha
+jquery/jquery
+twbs/bootstrap
+markedjs/marked
+expressjs/express
+koajs/koa
+fastify/fastify
+Automattic/mongoose
+eslint/eslint
+chalk/chalk
+nodemailer/nodemailer
+pm2/pm2
+hapijs/hapi
+date-fns/date-fns
+moment/moment
+lodash/lodash
+# --- PyPI ---
+psf/requests
+home-assistant/core
+openai/whisper
+ultralytics/yolov5
+AUTOMATIC1111/stable-diffusion-webui
+gradio-app/gradio
+TheAlgorithms/Python
+freqtrade/freqtrade
+CorentinJ/Real-Time-Voice-Cloning
+xtekky/gpt4free
+pytorch/pytorch
+keras-team/keras
+pandas-dev/pandas
+getsentry/sentry
+ansible/ansible
+encode/django-rest-framework
+fastapi/fastapi
+binary-husky/gpt_academic
+pallets/flask
+celery/celery
