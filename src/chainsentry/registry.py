@@ -88,6 +88,9 @@ class RegistryClient:
 
     def __init__(self, client: HttpClient) -> None:
         self.client = client
+        # In-memory memo on top of the disk cache: --resolve and the health
+        # check both ask for the same packages, even when caching is off.
+        self._memo: dict[tuple[Ecosystem, str], PackageInfo | None] = {}
 
     def info(self, ecosystem: Ecosystem, name: str) -> PackageInfo | None:
         """Return metadata, or ``None`` if the package does not exist on the public registry.
@@ -95,6 +98,13 @@ class RegistryClient:
         Raises:
             HttpError: if the registry could not be reached.
         """
+        if (ecosystem, name) in self._memo:
+            return self._memo[(ecosystem, name)]
+        info = self._lookup(ecosystem, name)
+        self._memo[(ecosystem, name)] = info
+        return info
+
+    def _lookup(self, ecosystem: Ecosystem, name: str) -> PackageInfo | None:
         key = f"registry:{ecosystem.value}:{name}"
         cached = self.client.cache.get_json(key)
         if cached is not MISS:
