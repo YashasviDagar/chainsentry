@@ -1,9 +1,9 @@
-# DepGuard — Implementation Plan
+# ChainSentry — Implementation Plan
 
 > Dependency & supply-chain risk scanner (CLI + GitHub Action).
 > This document is the roadmap for the whole project. Every phase lists **what**
 > gets built, **why** it is built that way, and **what to study** alongside it.
-> Status: **awaiting approval** — no code is written until the plan is OK'd.
+> Status: **approved** — built one phase at a time.
 
 ---
 
@@ -98,14 +98,14 @@ chainsentry/
 ├── action.yml                  # composite GitHub Action (phase 6)
 ├── .github/workflows/
 │   ├── ci.yml                  # run tests + lint on every push/PR
-│   └── depguard.yml            # dogfood: run DepGuard on this repo's PRs
+│   └── chainsentry.yml            # dogfood: run ChainSentry on this repo's PRs
 ├── docs/
 │   ├── SCORING.md              # the scoring formula, explained with examples
 │   ├── SECURITY_CONCEPTS.md    # study notes: CVE, GHSA, CVSS, SBOM, typosquatting...
 │   └── sample-output/          # real outputs used by the README
-├── src/depguard/
+├── src/chainsentry/
 │   ├── __init__.py             # version string
-│   ├── __main__.py             # enables `python -m depguard`
+│   ├── __main__.py             # enables `python -m chainsentry`
 │   ├── cli.py                  # argparse CLI, exit codes
 │   ├── config.py               # defaults: TTLs, thresholds, weights, paths
 │   ├── models.py               # Dependency, Vulnerability, Finding, PackageReport, ScanResult
@@ -236,9 +236,9 @@ class ScanResult:     packages, project_score, project_band, files, errors, tool
 Each phase ends with: summary · design rationale · interview questions · "test it yourself" commands · concepts to study. Then **stop and wait for OK**.
 
 ### Phase 0 — Skeleton (small, done together with Phase 1)
-* `pyproject.toml` (console script `depguard = depguard.cli:main`), `.gitignore`, `LICENSE`, `src/depguard/__init__.py`, `__main__.py`, `models.py`, `config.py`, a stub `cli.py` that prints the version.
+* `pyproject.toml` (console script `chainsentry = chainsentry.cli:main`), `.gitignore`, `LICENSE`, `src/chainsentry/__init__.py`, `__main__.py`, `models.py`, `config.py`, a stub `cli.py` that prints the version.
 * `.github/workflows/ci.yml` runs ruff + pytest on Python 3.11/3.12, Ubuntu + Windows.
-* **Done when:** `pip install -e .[dev]` works, `depguard --version` prints, `pytest` runs (0 tests is fine).
+* **Done when:** `pip install -e .[dev]` works, `chainsentry --version` prints, `pytest` runs (0 tests is fine).
 
 ### Phase 1 — Parsers
 **requirements.txt** (`pip_requirements.py`)
@@ -268,7 +268,7 @@ Each phase ends with: summary · design rationale · interview questions · "tes
 ### Phase 2 — OSV vulnerability lookup + HTTP/cache layer
 **net/client.py**: one shared `httpx.Client` with connect/read timeouts, a descriptive `User-Agent`, retries with exponential backoff on 429/5xx/connection errors (respecting `Retry-After`), and safe URL-encoding of package names (a name like `../../x` must never change the request path).
 
-**net/cache.py**: SQLite table `(key TEXT PRIMARY KEY, value BLOB, expires_at REAL)`; key = SHA-256 of method + URL + body. TTLs: OSV query results 6 h, vulnerability details 24 h, registry metadata 24 h. Location: `%LOCALAPPDATA%\depguard` on Windows / `~/.cache/depguard` elsewhere, overridable with `DEPGUARD_CACHE_DIR`. Flags: `--no-cache`, `depguard cache clear`.
+**net/cache.py**: SQLite table `(key TEXT PRIMARY KEY, value BLOB, expires_at REAL)`; key = SHA-256 of method + URL + body. TTLs: OSV query results 6 h, vulnerability details 24 h, registry metadata 24 h. Location: `%LOCALAPPDATA%\chainsentry` on Windows / `~/.cache/chainsentry` elsewhere, overridable with `CHAINSENTRY_CACHE_DIR`. Flags: `--no-cache`, `chainsentry cache clear`.
 
 **checks/osv.py**
 1. `POST https://api.osv.dev/v1/querybatch` with up to 1,000 `{package:{name, ecosystem}, version}` queries per request (chunked).
@@ -277,7 +277,7 @@ Each phase ends with: summary · design rationale · interview questions · "tes
 4. Severity: if a `CVSS_V3` vector is present, compute the base score with our own **CVSS v3.1 calculator** (`cvss.py`, tested against NVD examples). If only CVSS v4 or none, fall back to `database_specific.severity` (GHSA gives CRITICAL/HIGH/MODERATE/LOW). Otherwise `UNKNOWN`.
 * Dependencies without an exact version are not queried (OSV needs a version) and are listed as "not checked".
 
-**Privacy note (good interview point):** querying a public API leaks your dependency names. For private/internal packages that's sensitive, so DepGuard supports `--exclude <glob>` and `--offline` (typosquat check only).
+**Privacy note (good interview point):** querying a public API leaks your dependency names. For private/internal packages that's sensitive, so ChainSentry supports `--exclude <glob>` and `--offline` (typosquat check only).
 
 📚 Study: CVE vs GHSA vs PYSEC IDs and aliasing, the OSV schema, CVSS v3.1 metrics (AV/AC/PR/UI/S/C/I/A) and why base score ≠ real risk, CVSS v4, EPSS & CISA KEV (for "limitations / future work"), rate limiting and caching strategies.
 
@@ -348,11 +348,11 @@ project_score = min(100, max(package_scores) + 2 × (number of OTHER packages ra
 
 **CLI**
 ```
-depguard scan [PATH] [--file F]... [--format table|json|sbom|markdown]...
+chainsentry scan [PATH] [--file F]... [--format table|json|sbom|markdown]...
               [--output-dir DIR] [--fail-on low|medium|high|critical|none]
               [--min-score N] [--include-dev] [--resolve] [--recursive]
               [--skip osv,typosquat,health] [--exclude GLOB]... [--offline] [--no-cache]
-depguard cache clear
+chainsentry cache clear
 ```
 Exit codes: `0` passed · `1` risk threshold exceeded · `2` usage/parse error. (CI systems only understand exit codes, so these are part of the API.)
 Network failures degrade gracefully: the affected check is marked *incomplete* in the report instead of crashing.
@@ -361,7 +361,7 @@ Network failures degrade gracefully: the affected check is marked *incomplete* i
 
 ### Phase 6 — GitHub Action
 * **`action.yml` (composite, no Docker):** inputs `path`, `fail-on`, `min-score`, `include-dev`, `comment` (true/false), `python-version`; outputs `project-score`, `report-path`.
-  Steps: `actions/setup-python` → `actions/cache` for the DepGuard cache dir → `pip install` the action → run `depguard scan --format json --format markdown --format sbom` → write Markdown to `$GITHUB_STEP_SUMMARY` → post/update **one** PR comment (identified by a hidden `<!-- depguard-report -->` marker so re-runs edit instead of spamming) → upload JSON + SBOM as artifacts → exit with DepGuard's exit code.
+  Steps: `actions/setup-python` → `actions/cache` for the ChainSentry cache dir → `pip install` the action → run `chainsentry scan --format json --format markdown --format sbom` → write Markdown to `$GITHUB_STEP_SUMMARY` → post/update **one** PR comment (identified by a hidden `<!-- chainsentry-report -->` marker so re-runs edit instead of spamming) → upload JSON + SBOM as artifacts → exit with ChainSentry's exit code.
 * **Workflow** triggers on `pull_request` (not `pull_request_target`) with least-privilege `permissions: { contents: read, pull-requests: write }`. Fork PRs get a read-only token, so commenting is skipped gracefully there and the job summary still shows the result.
 * All third-party actions pinned to full commit SHAs.
 
@@ -391,7 +391,7 @@ Network failures degrade gracefully: the affected check is marked *incomplete* i
 * **`# LIMITATION:`** tag where a known gap exists — these feed the README's Limitations section.
 
 ## 8. Security of the tool itself
-DepGuard never runs `npm install`/`pip install` on the scanned project, never executes scripts, only parses data formats; it bounds file sizes, URL-encodes every package name, sets timeouts on every request, and confines `-r` includes to the project directory.
+ChainSentry never runs `npm install`/`pip install` on the scanned project, never executes scripts, only parses data formats; it bounds file sizes, URL-encodes every package name, sets timeouts on every request, and confines `-r` includes to the project directory.
 
 ## 9. Known limitations (to be documented in README)
 * Without a lockfile, versions are ranges — results are "what would be installed today", not what is deployed.
@@ -400,7 +400,7 @@ DepGuard never runs `npm install`/`pip install` on the scanned project, never ex
 * Typosquatting is heuristic: false positives (allowlist) and false negatives (novel tricks) both exist.
 * PyPI maintainer counts are not available via the JSON API.
 
-## 10. Decisions needed before Phase 0/1
-1. **Name:** tool/package called `depguard` inside the `chainsentry` folder — or rename the tool to **ChainSentry**?
-2. **Branch-per-phase** with `--no-ff` merges into `main` (recommended) — or commit everything straight to `main`?
-3. **GitHub remote:** should commits be pushed to a GitHub repo (needed for Phase 6), and if so, which URL? Nothing is pushed until you say so.
+## 10. Decisions (agreed)
+1. **Name:** the tool, package and CLI command are all **ChainSentry** / `chainsentry`.
+2. **Branch-per-phase**, merged into `main` with `--no-ff` once a phase is approved.
+3. **No GitHub remote for now.** Nothing is pushed; revisit before Phase 6 (the Action needs a repo to run on).
