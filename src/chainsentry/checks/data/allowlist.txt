@@ -1,0 +1,14 @@
+# Legitimate packages that look like typosquats of popular ones.
+# Format: <ecosystem>:<name>  (ecosystem is "npm" or "pypi", name lowercase)
+# Add an entry here when you have verified a package is genuine and the
+# typosquat check keeps flagging it.
+#
+# Examples of real, well-known near-collisions:
+pypi:request
+pypi:python-jose
+pypi:pyyaml-include
+pypi:pytest-mock
+npm:eslint-plugin-react-hooks
+npm:react-dom
+# BeautifulSoup 3 - genuine but obsolete (Python 2); bs4 is "beautifulsoup4".
+pypi:beautifulsoup
