@@ -31,6 +31,7 @@ from pathlib import Path
 from chainsentry import __version__, config
 from chainsentry.checks.base import Check
 from chainsentry.checks.osv import OsvCheck
+from chainsentry.checks.typosquat import TyposquatCheck
 from chainsentry.models import Dependency, PackageReport, ScanResult
 from chainsentry.net.cache import Cache
 from chainsentry.net.client import HttpClient
@@ -74,7 +75,7 @@ def open_cache(use_cache: bool) -> Cache:
 
 def build_checks(client: HttpClient) -> list[Check]:
     """All checks, in the order they run."""
-    return [OsvCheck(client)]
+    return [OsvCheck(client), TyposquatCheck()]
 
 
 def scan(
