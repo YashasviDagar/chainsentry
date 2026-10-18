@@ -1,0 +1,62 @@
+┌─────────────────────────────────────────────────────────────────── ChainSentry ───────────────────────────────────────────────────────────────────┐
+│ Project risk: 95/100 CRITICAL                                                                                                                     │
+│ Packages: 13 (12 direct)   CRITICAL: 3   HIGH: 3   MEDIUM: 3   LOW: 4                                                                             │
+│ Known vulnerabilities: 60 in 7 package(s)  (8 critical, 24 high, 23 medium, 5 low)  - 60 have a fix available                                     │
+│ package-lock.json, requirements.txt, requirements-dev.txt | checks: osv, typosquat, health | 0.5s                                                 │
+│ 1 package(s) have no exact version and were not checked for vulnerabilities (commit a lockfile, pin versions, or use --resolve).                  │
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+Packages at risk                                                                                      
+┌───────┬─────────────────┬─────────┬─────────────┬───────────────┬──────────────────────────────────┐
+│ Score │ Package         │ Version │ Type        │         Vulns │ Issues                           │
+├───────┼─────────────────┼─────────┼─────────────┼───────────────┼──────────────────────────────────┤
+│    85 │ django          │ 3.2.0   │ direct      │ 6C 15H 12M 5L │                                  │
+│    85 │ minimist        │ 1.2.5   │ direct, dev │            1C │ ABANDONED                        │
+│    75 │ pyyaml          │ 5.3.1   │ direct      │            1C │                                  │
+│    70 │ colourama       │ 0.1.6   │ direct      │             - │ TYPOSQUAT, NOT_IN_REGISTRY       │
+│    65 │ lodash          │ 4.17.15 │ direct      │         3H 3M │ SINGLE_MAINTAINER                │
+│    60 │ urllib3         │ 1.26.4  │ direct      │         6H 5M │                                  │
+│    27 │ express         │ 4.17.1  │ direct      │            2M │                                  │
+│    25 │ left-pad        │ 1.3.0   │ direct      │             - │ NPM_ALIAS, ABANDONED, DEPRECATED │
+│    25 │ pytest          │ 7.0.0   │ direct, dev │            1M │                                  │
+│    10 │ internal-lib    │ 1.0.0   │ direct      │             - │ NON_REGISTRY_SOURCE              │
+│    10 │ python-dateutil │ 2.8.2   │ direct      │             - │ ABANDONED                        │
+│     5 │ requests        │ >=2.20  │ direct      │             - │ UNPINNED                         │
+└───────┴─────────────────┴─────────┴─────────────┴───────────────┴──────────────────────────────────┘
+1 other package(s) have no known issues.
+Known vulnerabilities                                                                                                                                
+┌──────────┬──────┬────────────────┬─────────────────────────────────────┬───────────────────────┬──────────────────────────────────────────────────┐
+│ Severity │ CVSS │ Package        │ Advisory                            │ Fixed in              │ Summary                                          │
+├──────────┼──────┼────────────────┼─────────────────────────────────────┼───────────────────────┼──────────────────────────────────────────────────┤
+│ CRITICAL │  9.8 │ django@3.2.0   │ GHSA-2gwj-7jmv-h26r, CVE-2022-28346 │ 2.2.28, 3.2.13, 4.0.4 │ SQL Injection in Django                          │
+│ CRITICAL │  9.8 │ django@3.2.0   │ GHSA-p64x-8rxx-wf6q, CVE-2022-34265 │ 3.2.14, 4.0.6         │ Django `Trunc()` and `Extract()` database        │
+│          │      │                │                                     │                       │ functions vulnerable to SQL Injection            │
+│ CRITICAL │  9.8 │ django@3.2.0   │ GHSA-r3xc-prgr-mg9p, CVE-2023-31047 │ 3.2.19, 4.1.9, 4.2.1  │ Django bypasses validation when using one form   │
+│          │      │                │                                     │                       │ field to upload multiple files                   │
+│ CRITICAL │  9.8 │ django@3.2.0   │ GHSA-w24h-v9qh-8gxj, CVE-2022-28347 │ 2.2.28, 3.2.13, 4.0.4 │ SQL Injection in Django                          │
+│ CRITICAL │  9.8 │ django@3.2.0   │ GHSA-xpfp-f569-q3p2, CVE-2021-35042 │ 3.2.5, 3.1.13         │ SQL Injection in Django                          │
+│ CRITICAL │  9.8 │ minimist@1.2.5 │ GHSA-xvch-5gv4-984h, CVE-2021-44906 │ 1.2.6, 0.2.4          │ Prototype Pollution in minimist                  │
+│ CRITICAL │  9.8 │ pyyaml@5.3.1   │ GHSA-8q59-q68h-6hv4, CVE-2020-14343 │ 5.4                   │ Improper Input Validation in PyYAML              │
+│ CRITICAL │  9.1 │ django@3.2.0   │ GHSA-frmv-pr5f-9mcr, CVE-2025-64459 │ 5.2.8, 5.1.14, 4.2.26 │ Django vulnerable to SQL injection via           │
+│          │      │                │                                     │                       │ _connector keyword argument in QuerySet and Q    │
+│          │      │                │                                     │                       │ objects.                                         │
+│ HIGH     │  8.8 │ django@3.2.0   │ GHSA-8x94-hmjh-97hq, CVE-2022-36359 │ 3.2.15, 4.0.7         │ Django vulnerable to Reflected File Download     │
+│          │      │                │                                     │                       │ attack                                           │
+│ HIGH     │  8.8 │ django@3.2.0   │ GHSA-wvqv-fj8w-qmhm, CVE-2026-15307 │ 5.2.17, 6.0.8         │ Django GeoDjango spatial lookups allow file      │
+│          │      │                │                                     │                       │ writes and outbound requests through GDAL raster │
+│          │      │                │                                     │                       │ parsing                                          │
+│ HIGH     │  8.1 │ lodash@4.17.15 │ GHSA-r5fr-rjxr-66jc, CVE-2026-4800  │ 4.18.0                │ lodash vulnerable to Code Injection via          │
+│          │      │                │                                     │                       │ `_.template` imports key names                   │
+│ HIGH     │  7.5 │ django@3.2.0   │ GHSA-2hrw-hx67-34x6, CVE-2023-24580 │ 3.2.18, 4.1.7, 4.0.10 │ Resource exhaustion in Django                    │
+│ HIGH     │  7.5 │ django@3.2.0   │ GHSA-53qw-q765-4fww, CVE-2021-45115 │ 2.2.26, 3.2.11, 4.0.1 │ Denial-of-service in Django                      │
+│ HIGH     │  7.5 │ django@3.2.0   │ GHSA-6cw3-g6wv-c2xv, CVE-2022-23833 │ 2.2.27, 3.2.12, 4.0.2 │ Infinite Loop in Django                          │
+│ HIGH     │  7.5 │ django@3.2.0   │ GHSA-8c5j-9r9f-c6w8, CVE-2021-45116 │ 2.2.26, 3.2.11, 4.0.1 │ Information disclosure in Django                 │
+└──────────┴──────┴────────────────┴─────────────────────────────────────┴───────────────────────┴──────────────────────────────────────────────────┘
+Showing 15 of 60 vulnerabilities - use --details or the JSON report for all of them.
+
+1 warning(s):
+  - requirements.txt:5: --extra-index-url https://***@pypi.internal.example.com/simple enables dependency confusion: pip will install whichever index
+offers the highest version
+wrote docs\sample-output\report.json
+wrote docs\sample-output\sbom.cdx.json
+wrote docs\sample-output\report.md
+FAIL: 3 package(s) rated CRITICAL or worse: minimist@1.2.5, django@3.2.0, pyyaml@5.3.1
