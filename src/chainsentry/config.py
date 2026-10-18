@@ -130,3 +130,43 @@ NEW_VERSION_DAYS: int = 7
 #: npm packages with this many maintainers or fewer are flagged
 #: (one compromised account = full control of the package).
 SINGLE_MAINTAINER_MAX: int = 1
+
+# ---------------------------------------------------------------------------
+# Risk scoring (Phase 5) - explained with examples in docs/SCORING.md
+# ---------------------------------------------------------------------------
+
+#: Points for the *worst* known vulnerability of a package, by severity.
+#: Chosen so a package's band is never lower than its worst vulnerability:
+#: CRITICAL 75 lands in the CRITICAL band (75+), HIGH 50 in HIGH (50-74),
+#: MEDIUM 25 in MEDIUM (20-49). UNKNOWN is treated like MEDIUM: a published
+#: advisory without a rating is still a real advisory.
+VULN_POINTS: dict[str, int] = {"CRITICAL": 75, "HIGH": 50, "MEDIUM": 25, "LOW": 5, "UNKNOWN": 25}
+#: Each *additional* vulnerability adds a little, up to a cap - ten medium
+#: bugs are worse than one, but not ten times worse.
+EXTRA_VULN_POINTS: int = 2
+EXTRA_VULN_CAP: int = 10
+
+#: Points per finding code (from parsers, health and typosquat checks).
+SIGNAL_POINTS: dict[str, int] = {
+    "NOT_IN_REGISTRY": 40,
+    "VERSION_NOT_IN_REGISTRY": 25,
+    "NEW_PACKAGE": 20,
+    "INSTALL_SCRIPT": 15,
+    "NEW_VERSION": 10,
+    "ABANDONED": 10,
+    "DEPRECATED": 10,
+    "YANKED": 10,
+    "NON_REGISTRY_SOURCE": 10,
+    "SINGLE_MAINTAINER": 5,
+    "UNPINNED": 5,
+    "NO_REPOSITORY": 5,
+    "NPM_ALIAS": 5,
+    "MISSING_INTEGRITY": 5,
+}
+#: Typosquat points depend on the detector's confidence.
+TYPOSQUAT_POINTS: dict[str, int] = {"HIGH": 50, "MEDIUM": 30}
+
+#: Score -> band thresholds, highest first.
+BANDS: tuple[tuple[int, str], ...] = ((75, "CRITICAL"), (50, "HIGH"), (20, "MEDIUM"), (0, "LOW"))
+#: Project score = worst package + this many points per other HIGH/CRITICAL package.
+PROJECT_POINTS_PER_RISKY_PACKAGE: int = 2
