@@ -44,7 +44,7 @@ from chainsentry.reporters import table as table_reporter
 from chainsentry.scanner import CACHE_FILE, ScanOptions, open_cache, scan
 
 #: Check names accepted by --skip.
-CHECK_NAMES = ("osv",)
+CHECK_NAMES = ("osv", "typosquat")
 
 EXIT_OK = 0
 EXIT_RISK = 1

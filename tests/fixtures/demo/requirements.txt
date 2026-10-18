@@ -10,3 +10,4 @@ PyYAML==5.3.1 \
     --hash=sha256:b8eac752c5e14d3eca0e6dd9199cd627518cb5ec06add0de9d32baeee6fe645d
 python_dateutil==2.8.2        # name gets PEP 503-normalised to python-dateutil
 urllib3[socks]==1.26.4 ; python_version >= "3.6"
+colourama==0.1.6              # typosquat of colorama (real PyPI attack, 2018)

@@ -25,13 +25,13 @@ class TestDepsCommand:
         out = capsys.readouterr().out
         assert "lodash" in out
         assert "django" in out
-        assert "12 dependencies" in out
+        assert "13 dependencies" in out
 
     def test_direct_only_hides_transitive(self, demo_dir, capsys):
         main(["deps", str(demo_dir), "--direct-only"])
         out = capsys.readouterr().out
         assert "debug" not in out  # transitive dependency of express
-        assert "showing 11 after filters" in out
+        assert "showing 12 after filters" in out
 
     def test_no_dev_hides_dev_dependencies(self, demo_dir, capsys):
         main(["deps", str(demo_dir), "--no-dev"])
