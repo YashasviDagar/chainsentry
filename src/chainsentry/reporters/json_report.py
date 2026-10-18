@@ -89,5 +89,6 @@ def render(result: ScanResult) -> str:
 
 def write(result: ScanResult, path: Path) -> Path:
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(render(result), encoding="utf-8")
+    # newline="\n": identical bytes on Windows and Linux (no CRLF conversion).
+    path.write_text(render(result), encoding="utf-8", newline="\n")
     return path
