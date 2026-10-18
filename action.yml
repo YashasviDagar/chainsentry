@@ -1,0 +1,169 @@
+# ChainSentry GitHub Action - composite (no Docker).
+#
+# A composite action is a list of steps that runs directly on the workflow's
+# runner. Compared to a Docker action it starts in seconds, works on
+# Linux/macOS/Windows runners, and needs no container registry.
+#
+# What it does on every run:
+#   1. installs ChainSentry from this action's own checkout (github.action_path)
+#   2. restores the API-response cache from earlier runs (fewer API calls)
+#   3. scans the repository -> table in the log, JSON + Markdown + SBOM files
+#   4. writes the Markdown report to the job summary
+#   5. on pull requests: creates or updates ONE comment with the report
+#   6. uploads the reports as a workflow artifact
+#   7. fails the job if the risk threshold was exceeded (or the scan errored)
+#
+# Security notes (see docs/SECURITY_CONCEPTS.md section 7):
+#   * Inputs are passed to shell steps via `env:` and quoted ("$INPUT_PATH"),
+#     never pasted into scripts with ${{ }} - that would allow script
+#     injection through crafted input values.
+#   * Third-party actions are pinned to full commit SHAs.
+#   * The token only needs `pull-requests: write` (for the comment); the
+#     calling workflow should declare that explicitly.
+
+name: ChainSentry dependency risk scan
+description: Scan npm and PyPI dependencies for known vulnerabilities, typosquatting and unhealthy packages.
+author: Yashasvi Dagar
+branding:
+  icon: shield
+  color: red
+
+inputs:
+  path:
+    description: Directory or manifest file to scan, relative to the repository root.
+    default: "."
+  fail-on:
+    description: Fail if any package is rated at this level or worse (none, low, medium, high, critical).
+    default: critical
+  min-score:
+    description: Also fail if the project risk score is at or above this number (empty = disabled).
+    default: ""
+  include-dev:
+    description: Also scan development-only dependencies ("true"/"false").
+    default: "false"
+  recursive:
+    description: Search sub-directories for manifests ("true"/"false").
+    default: "false"
+  resolve:
+    description: Resolve version ranges to the newest matching release ("true"/"false").
+    default: "false"
+  comment:
+    description: Post / update a pull-request comment with the report ("true"/"false").
+    default: "true"
+  github-token:
+    description: Token used to post the PR comment.
+    default: ${{ github.token }}
+  python-version:
+    description: Python version used to run ChainSentry.
+    default: "3.12"
+
+outputs:
+  project-score:
+    description: Overall project risk score (0-100).
+    value: ${{ steps.scan.outputs.project-score }}
+  project-band:
+    description: Overall risk band (LOW, MEDIUM, HIGH, CRITICAL).
+    value: ${{ steps.scan.outputs.project-band }}
+  exit-code:
+    description: ChainSentry's exit code (0 pass, 1 threshold exceeded, 2 error).
+    value: ${{ steps.scan.outputs.exit-code }}
+  report-dir:
+    description: Directory containing report.json, report.md and sbom.cdx.json.
+    value: ${{ steps.scan.outputs.report-dir }}
+
+runs:
+  using: composite
+  steps:
+    - name: Set up Python
+      uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+      with:
+        python-version: ${{ inputs.python-version }}
+
+    - name: Install ChainSentry
+      shell: bash
+      env:
+        ACTION_PATH: ${{ github.action_path }}
+      run: python -m pip install --disable-pip-version-check --quiet "$ACTION_PATH"
+
+    - name: Restore API cache
+      uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      with:
+        path: ${{ runner.temp }}/chainsentry-cache
+        # A new key every run saves the refreshed cache; restore-keys picks
+        # up the most recent previous one. Entries expire on their own TTLs.
+        key: chainsentry-${{ runner.os }}-${{ github.run_id }}-${{ github.run_attempt }}
+        restore-keys: chainsentry-${{ runner.os }}-
+
+    - name: Scan dependencies
+      id: scan
+      shell: bash
+      env:
+        INPUT_PATH: ${{ inputs.path }}
+        INPUT_FAIL_ON: ${{ inputs.fail-on }}
+        INPUT_MIN_SCORE: ${{ inputs.min-score }}
+        INPUT_INCLUDE_DEV: ${{ inputs.include-dev }}
+        INPUT_RECURSIVE: ${{ inputs.recursive }}
+        INPUT_RESOLVE: ${{ inputs.resolve }}
+        CHAINSENTRY_CACHE_DIR: ${{ runner.temp }}/chainsentry-cache
+        OUT_DIR: ${{ runner.temp }}/chainsentry-report
+        # Wide, colour-free table in the job log.
+        COLUMNS: "160"
+      run: |
+        args=(scan "$INPUT_PATH" --fail-on "$INPUT_FAIL_ON"
+              -f table -f json -f markdown -f sbom -o "$OUT_DIR")
+        if [[ "$INPUT_INCLUDE_DEV" == "true" ]]; then args+=(--include-dev); fi
+        if [[ "$INPUT_RECURSIVE" == "true" ]]; then args+=(--recursive); fi
+        if [[ "$INPUT_RESOLVE" == "true" ]]; then args+=(--resolve); fi
+        if [[ -n "$INPUT_MIN_SCORE" ]]; then args+=(--min-score "$INPUT_MIN_SCORE"); fi
+
+        # Don't stop on a non-zero exit: we still want the summary, the
+        # comment and the artifacts. The final step re-raises the code.
+        set +e
+        chainsentry "${args[@]}"
+        code=$?
+        set -e
+
+        echo "exit-code=$code" >> "$GITHUB_OUTPUT"
+        echo "report-dir=$OUT_DIR" >> "$GITHUB_OUTPUT"
+        if [[ -f "$OUT_DIR/report.json" ]]; then
+          python - "$OUT_DIR/report.json" >> "$GITHUB_OUTPUT" <<'PY'
+        import json, sys
+        summary = json.load(open(sys.argv[1], encoding="utf-8"))["summary"]
+        print(f"project-score={summary['project_score']}")
+        print(f"project-band={summary['project_band']}")
+        PY
+        fi
+        if [[ -f "$OUT_DIR/report.md" ]]; then
+          cat "$OUT_DIR/report.md" >> "$GITHUB_STEP_SUMMARY"
+        fi
+
+    - name: Comment on pull request
+      if: inputs.comment == 'true' && github.event_name == 'pull_request'
+      shell: bash
+      env:
+        GITHUB_TOKEN: ${{ inputs.github-token }}
+        REPORT: ${{ steps.scan.outputs.report-dir }}/report.md
+      run: |
+        if [[ -f "$REPORT" ]]; then
+          chainsentry github-comment --report "$REPORT"
+        fi
+
+    - name: Upload reports
+      if: always()
+      uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+      with:
+        name: chainsentry-report
+        path: ${{ steps.scan.outputs.report-dir }}
+        if-no-files-found: ignore
+
+    - name: Enforce risk threshold
+      shell: bash
+      env:
+        CODE: ${{ steps.scan.outputs.exit-code }}
+      run: |
+        if [[ "$CODE" == "1" ]]; then
+          echo "::error title=ChainSentry::Dependency risk threshold exceeded - see the job summary."
+        elif [[ "$CODE" != "0" ]]; then
+          echo "::error title=ChainSentry::Scan failed (exit code $CODE)."
+        fi
+        exit "${CODE:-2}"
