@@ -1,0 +1,93 @@
+# =============================================================================
+# ChainSentry packaging & tool configuration.
+#
+# pyproject.toml is the single, standard (PEP 517/518/621) place for:
+#   * how to build the package          -> [build-system]
+#   * package metadata + dependencies   -> [project]
+#   * the `chainsentry` console command -> [project.scripts]
+#   * pytest / ruff settings            -> [tool.*]
+# =============================================================================
+
+[build-system]
+# Hatchling is a small, modern build backend with good `src/` layout support.
+requires = ["hatchling>=1.24"]
+build-backend = "hatchling.build"
+
+[project]
+name = "chainsentry"
+# The version lives in src/chainsentry/__init__.py (single source of truth);
+# hatchling reads it from there, see [tool.hatch.version] below.
+dynamic = ["version"]
+description = "Dependency & supply-chain risk scanner for npm and PyPI projects"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "Yashasvi Dagar" }]
+keywords = ["security", "supply-chain", "sbom", "osv", "typosquatting", "dependencies"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Security",
+    "Environment :: Console",
+]
+
+# Runtime dependencies are kept deliberately small: every dependency of a
+# security tool is itself supply-chain attack surface.
+dependencies = [
+    "httpx>=0.27",      # HTTP client with mandatory-by-design timeouts (used from Phase 2)
+    "rich>=13.7",       # coloured terminal tables and panels
+    "packaging>=24.0",  # official PyPA implementation of PEP 440 / PEP 508
+]
+
+[project.optional-dependencies]
+# Installed with:  pip install -e ".[dev]"
+dev = [
+    "pytest>=8.0",
+    "pytest-cov>=5.0",
+    "respx>=0.21",      # mocks httpx so unit tests never touch the network
+    "ruff>=0.6",
+]
+
+[project.scripts]
+# Creates the `chainsentry` executable that calls chainsentry.cli:main().
+chainsentry = "chainsentry.cli:main"
+
+[tool.hatch.version]
+path = "src/chainsentry/__init__.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/chainsentry"]
+
+# -----------------------------------------------------------------------------
+# pytest
+# -----------------------------------------------------------------------------
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+# -ra : print a short summary of skipped/failed tests at the end.
+# -m "not network" : live-API tests are opt-in (run them with `pytest -m network`).
+addopts = "-ra -m \"not network\""
+markers = ["network: test talks to a real external API (opt-in)"]
+
+# -----------------------------------------------------------------------------
+# ruff (linter + import sorter)
+# -----------------------------------------------------------------------------
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = [
+    "E", "W",  # pycodestyle
+    "F",       # pyflakes (unused imports, undefined names)
+    "I",       # isort (import ordering)
+    "B",       # flake8-bugbear (likely bugs)
+    "UP",      # pyupgrade (modern syntax)
+    "S",       # flake8-bandit (security smells) - fitting for a security tool
+    "SIM",     # flake8-simplify
+]
+
+[tool.ruff.lint.per-file-ignores]
+# `assert` is the whole point of pytest tests.
+"tests/**" = ["S101"]

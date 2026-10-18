@@ -1,0 +1,29 @@
+# --- Python build / bytecode artefacts ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+
+# --- Virtual environments (never commit these) ---
+.venv/
+venv/
+
+# --- Test / tooling caches ---
+.pytest_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# --- ChainSentry output ---
+# Reports generated while trying the tool locally. Curated examples for the
+# README live in docs/sample-output/ and ARE committed.
+chainsentry-report/
+*.sbom.json
+
+# --- Editors / OS ---
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
