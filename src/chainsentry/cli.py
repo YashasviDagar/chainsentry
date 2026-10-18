@@ -26,6 +26,8 @@ Commands
     Runs every check and prints the risk report.
 ``chainsentry cache clear``
     Empties the on-disk HTTP cache.
+``chainsentry github-comment --report report.md``
+    Used by the GitHub Action: posts or updates the PR comment.
 """
 
 from __future__ import annotations
@@ -34,11 +36,12 @@ import argparse
 from collections.abc import Sequence
 from pathlib import Path
 
+import httpx
 from rich.console import Console
 from rich.markup import escape
 from rich.table import Table
 
-from chainsentry import __version__, config
+from chainsentry import __version__, config, github
 from chainsentry.models import Dependency, ScanResult, Severity
 from chainsentry.parsers import ParseError, ParseResult, parse_project
 from chainsentry.reporters import cyclonedx, json_report, markdown
@@ -101,6 +104,19 @@ def build_parser() -> argparse.ArgumentParser:
     cache_sub = cache_cmd.add_subparsers(dest="cache_command", metavar="<action>", required=True)
     cache_sub.add_parser("clear", help="delete every cached API response")
     cache_sub.add_parser("path", help="print where the cache is stored")
+
+    gh = sub.add_parser(
+        "github-comment",
+        help="post or update the PR comment (used inside GitHub Actions)",
+        description="Reads GITHUB_TOKEN, GITHUB_REPOSITORY and GITHUB_EVENT_PATH from the "
+        "environment and creates or updates ChainSentry's pull-request comment.",
+    )
+    gh.add_argument("--report", required=True, help="Markdown report written by 'scan -f markdown'")
+    gh.add_argument(
+        "--bot-login",
+        default=github.DEFAULT_BOT_LOGIN,
+        help="only comments by this account are updated (default: github-actions[bot])",
+    )
     return parser
 
 
@@ -198,6 +214,8 @@ def main(argv: Sequence[str] | None = None) -> int:
         return _cmd_scan(args, Console())
     if args.command == "cache":
         return _cmd_cache(args, Console())
+    if args.command == "github-comment":
+        return _cmd_github_comment(args)
 
     # No sub-command given: show help rather than doing nothing silently.
     parser.print_help()
@@ -258,7 +276,9 @@ def write_reports(
         elif fmt == "sbom":
             cyclonedx.write(result, path)
         else:
-            path.write_text(markdown.render(result, failed_reasons=reasons), encoding="utf-8")
+            path.write_text(
+                markdown.render(result, failed_reasons=reasons), encoding="utf-8", newline="\n"
+            )
         written.append(path)
     return written
 
@@ -272,6 +292,23 @@ def _cmd_cache(args: argparse.Namespace, console: Console) -> int:
     removed = cache.clear()
     cache.close()
     console.print(f"Removed {removed} cached response(s).")
+    return EXIT_OK
+
+
+def _cmd_github_comment(args: argparse.Namespace) -> int:
+    """Implementation of ``chainsentry github-comment``.
+
+    A failed comment must not fail the build (fork PRs cannot comment), so
+    problems are printed as GitHub ``::warning::`` annotations and exit 0.
+    """
+    try:
+        body = Path(args.report).read_text(encoding="utf-8")
+        ctx = github.context_from_env()
+        outcome = github.upsert_comment(ctx, body, bot_login=args.bot_login)
+    except (OSError, github.GitHubError, httpx.HTTPError) as exc:
+        print(f"::warning title=ChainSentry::could not post PR comment: {exc}")
+        return EXIT_OK
+    print(f"ChainSentry PR comment {outcome}.")
     return EXIT_OK
 
 

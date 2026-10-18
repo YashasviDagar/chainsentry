@@ -1,0 +1,41 @@
+# Dogfooding: run this repository's own action on every pull request.
+#
+# ChainSentry itself is a Python project configured with pyproject.toml
+# (not a supported manifest yet), so this workflow scans the deliberately
+# vulnerable demo project instead. That makes every PR show a realistic
+# report comment - and proves the action works end to end.
+#
+# `fail-on: none` because the demo is *supposed* to be vulnerable. In a real
+# project, keep the default (`critical`) or use `high`.
+name: ChainSentry
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+# Least privilege: read the code, write the single PR comment. Nothing else.
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Run ChainSentry
+        id: chainsentry
+        uses: ./ # this repository's action.yml; other repos use <owner>/chainsentry@<sha>
+        with:
+          path: tests/fixtures/demo
+          include-dev: "true"
+          fail-on: none
+
+      - name: Show outputs
+        env:
+          SCORE: ${{ steps.chainsentry.outputs.project-score }}
+          BAND: ${{ steps.chainsentry.outputs.project-band }}
+        run: echo "Project risk $SCORE/100 ($BAND)"
