@@ -10,9 +10,9 @@ Design decisions
 * **Enums for closed sets of values** (ecosystems, severities) so a typo
   such as ``"pypi"`` vs ``"PyPI"`` is caught immediately instead of
   silently producing zero OSV results.
-* **The model grows with the phases.** ``Vulnerability``,
+* **The model grew with the phases.** ``Vulnerability``,
   ``PackageReport`` and ``ScanResult`` arrived in Phase 2 with the scanner;
-  risk scores are added in Phase 5.
+  risk scores (``ScoreComponent`` and the score fields) in Phase 5.
 """
 
 from __future__ import annotations
@@ -207,12 +207,20 @@ class Vulnerability:
         return self.id.startswith("MAL-") or any(a.startswith("MAL-") for a in self.aliases)
 
 
+@dataclass(frozen=True)
+class ScoreComponent:
+    """One line of a score explanation, e.g. ("worst vulnerability: CRITICAL", 60)."""
+
+    reason: str
+    points: int
+
+
 @dataclass
 class PackageReport:
     """Everything ChainSentry learned about one dependency.
 
-    Checks *add* to ``findings`` / ``vulnerabilities``; the scorer (Phase 5)
-    then sets ``score`` and ``band``.
+    Checks *add* to ``findings`` / ``vulnerabilities``; the scorer then sets
+    ``score``, ``band`` and ``score_breakdown`` (which explains the score).
     """
 
     dependency: Dependency
@@ -221,6 +229,10 @@ class PackageReport:
     #: True when the version was resolved from a range by ``--resolve``
     #: (i.e. "what would be installed today", not what is locked).
     resolved: bool = False
+    #: Risk score 0-100 (see scoring/risk.py and docs/SCORING.md).
+    score: int = 0
+    band: Severity = Severity.LOW
+    score_breakdown: list[ScoreComponent] = field(default_factory=list)
 
     def add_finding(self, finding: Finding) -> None:
         """Append ``finding`` unless an identical one (same code+message) exists."""
@@ -245,3 +257,6 @@ class ScanResult:
     #: ISO-8601 UTC timestamp of when the scan started.
     scanned_at: str = ""
     duration_seconds: float = 0.0
+    #: Overall project risk 0-100 and its band.
+    project_score: int = 0
+    project_band: Severity = Severity.LOW

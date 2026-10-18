@@ -6,7 +6,7 @@ Pipeline::
       filter                 drop dev deps / --exclude patterns
       Resolver (optional)    ranges     -> concrete versions (--resolve)
       checks                 osv, typosquat, health -> findings / vulns
-      scoring                findings   -> 0-100 scores          (Phase 5)
+      scoring                findings   -> 0-100 scores
     ScanResult               -> reporters (table / JSON / SBOM / Markdown)
 
 Design decisions
@@ -39,6 +39,7 @@ from chainsentry.net.client import HttpClient
 from chainsentry.parsers import ParseResult, parse_project
 from chainsentry.registry import RegistryClient
 from chainsentry.resolver import Resolver
+from chainsentry.scoring import apply_scores
 
 CACHE_FILE = "cache.sqlite3"
 
@@ -132,7 +133,7 @@ def scan(
         if own_client:
             client.close()
 
-    return ScanResult(
+    result = ScanResult(
         target=str(target),
         packages=reports,
         files=parsed.files,
@@ -143,6 +144,8 @@ def scan(
         scanned_at=scanned_at,
         duration_seconds=round(time.monotonic() - started, 2),
     )
+    apply_scores(result)
+    return result
 
 
 def _select(

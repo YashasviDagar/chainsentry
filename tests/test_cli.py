@@ -3,7 +3,7 @@
 import pytest
 
 from chainsentry import __version__
-from chainsentry.cli import EXIT_ERROR, EXIT_OK, main
+from chainsentry.cli import EXIT_ERROR, EXIT_OK, EXIT_RISK, main
 
 
 def test_version_flag_prints_version(capsys):
@@ -40,3 +40,37 @@ class TestDepsCommand:
     def test_missing_path_returns_error_code(self, tmp_path, capsys):
         assert main(["deps", str(tmp_path / "missing")]) == EXIT_ERROR
         assert "error:" in capsys.readouterr().out
+
+
+class TestScanCommand:
+    """`scan` runs offline here (typosquat + parser checks only), so no network is used."""
+
+    def run(self, demo_dir, *extra: str) -> int:
+        return main(["scan", str(demo_dir), "--offline", "--no-cache", *extra])
+
+    def test_default_threshold_passes_offline_demo(self, demo_dir, capsys):
+        assert self.run(demo_dir) == EXIT_OK
+        assert "ChainSentry" in capsys.readouterr().out
+
+    def test_fail_on_medium_fails(self, demo_dir, capsys):
+        # colourama's typosquat finding alone is MEDIUM (30 points).
+        assert self.run(demo_dir, "--fail-on", "medium") == EXIT_RISK
+        assert "FAIL:" in capsys.readouterr().out
+
+    def test_fail_on_none_never_fails(self, demo_dir):
+        assert self.run(demo_dir, "--fail-on", "none") == EXIT_OK
+
+    def test_min_score(self, demo_dir):
+        assert self.run(demo_dir, "--fail-on", "none", "--min-score", "1") == EXIT_RISK
+
+    def test_writes_requested_formats(self, demo_dir, tmp_path):
+        out = tmp_path / "reports"
+        self.run(demo_dir, "-f", "json", "-f", "sbom", "-f", "markdown", "-o", str(out))
+        assert sorted(p.name for p in out.iterdir()) == [
+            "report.json",
+            "report.md",
+            "sbom.cdx.json",
+        ]
+
+    def test_parse_error_exit_code(self, tmp_path):
+        assert main(["scan", str(tmp_path / "nope"), "--offline"]) == EXIT_ERROR

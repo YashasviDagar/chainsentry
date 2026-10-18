@@ -1,0 +1,3024 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.5",
+  "serialNumber": "urn:uuid:0f68e02c-83a9-4e7d-ae77-5fe93d353e0a",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2026-10-18T20:15:13+00:00",
+    "tools": {
+      "components": [
+        {
+          "type": "application",
+          "name": "chainsentry",
+          "version": "0.1.0"
+        }
+      ]
+    },
+    "component": {
+      "type": "application",
+      "name": "demo",
+      "bom-ref": "project-root"
+    },
+    "properties": [
+      {
+        "name": "chainsentry:project-score",
+        "value": "95"
+      },
+      {
+        "name": "chainsentry:project-band",
+        "value": "CRITICAL"
+      }
+    ]
+  },
+  "components": [
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/express@4.17.1",
+      "name": "express",
+      "version": "4.17.1",
+      "purl": "pkg:npm/express@4.17.1",
+      "scope": "required",
+      "properties": [
+        {
+          "name": "chainsentry:risk-score",
+          "value": "27"
+        },
+        {
+          "name": "chainsentry:risk-band",
+          "value": "MEDIUM"
+        },
+        {
+          "name": "chainsentry:direct",
+          "value": "true"
+        },
+        {
+          "name": "chainsentry:source-file",
+          "value": "package-lock.json"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/debug@2.6.9",
+      "name": "debug",
+      "version": "2.6.9",
+      "purl": "pkg:npm/debug@2.6.9",
+      "scope": "required",
+      "properties": [
+        {
+          "name": "chainsentry:risk-score",
+          "value": "0"
+        },
+        {
+          "name": "chainsentry:risk-band",
+          "value": "LOW"
+        },
+        {
+          "name": "chainsentry:direct",
+          "value": "false"
+        },
+        {
+          "name": "chainsentry:source-file",
+          "value": "package-lock.json"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/lodash@4.17.15",
+      "name": "lodash",
+      "version": "4.17.15",
+      "purl": "pkg:npm/lodash@4.17.15",
+      "scope": "required",
+      "properties": [
+        {
+          "name": "chainsentry:risk-score",
+          "value": "65"
+        },
+        {
+          "name": "chainsentry:risk-band",
+          "value": "HIGH"
+        },
+        {
+          "name": "chainsentry:direct",
+          "value": "true"
+        },
+        {
+          "name": "chainsentry:source-file",
+          "value": "package-lock.json"
+        },
+        {
+          "name": "chainsentry:finding",
+          "value": "SINGLE_MAINTAINER"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/left-pad@1.3.0",
+      "name": "left-pad",
+      "version": "1.3.0",
+      "purl": "pkg:npm/left-pad@1.3.0",
+      "scope": "required",
+      "properties": [
+        {
+          "name": "chainsentry:risk-score",
+          "value": "25"
+        },
+        {
+          "name": "chainsentry:risk-band",
+          "value": "MEDIUM"
+        },
+        {
+          "name": "chainsentry:direct",
+          "value": "true"
+        },
+        {
+          "name": "chainsentry:source-file",
+          "value": "package-lock.json"
+        },
+        {
+          "name": "chainsentry:finding",
+          "value": "NPM_ALIAS"
+        },
+        {
+          "name": "chainsentry:finding",
+          "value": "ABANDONED"
+        },
+        {
+          "name": "chainsentry:finding",
+          "value": "DEPRECATED"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/internal-lib@1.0.0",
+      "name": "internal-lib",
+      "version": "1.0.0",
+      "purl": "pkg:npm/internal-lib@1.0.0",
+      "scope": "required",
+      "properties": [
+        {
+          "name": "chainsentry:risk-score",
+          "value": "10"
+        },
+        {
+          "name": "chainsentry:risk-band",
+          "value": "LOW"
+        },
+        {
+          "name": "chainsentry:direct",
+          "value": "true"
+        },
+        {
+          "name": "chainsentry:source-file",
+          "value": "package-lock.json"
+        },
+        {
+          "name": "chainsentry:finding",
+          "value": "NON_REGISTRY_SOURCE"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/minimist@1.2.5",
+      "name": "minimist",
+      "version": "1.2.5",
+      "purl": "pkg:npm/minimist@1.2.5",
+      "scope": "excluded",
+      "properties": [
+        {
+          "name": "chainsentry:risk-score",
+          "value": "85"
+        },
+        {
+          "name": "chainsentry:risk-band",
+          "value": "CRITICAL"
+        },
+        {
+          "name": "chainsentry:direct",
+          "value": "true"
+        },
+        {
+          "name": "chainsentry:source-file",
+          "value": "package-lock.json"
+        },
+        {
+          "name": "chainsentry:finding",
+          "value": "ABANDONED"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pypi/django@3.2.0",
+      "name": "django",
+      "version": "3.2.0",
+      "purl": "pkg:pypi/django@3.2.0",
+      "scope": "required",
+      "properties": [
+        {
+          "name": "chainsentry:risk-score",
+          "value": "85"
+        },
+        {
+          "name": "chainsentry:risk-band",
+          "value": "CRITICAL"
+        },
+        {
+          "name": "chainsentry:direct",
+          "value": "true"
+        },
+        {
+          "name": "chainsentry:source-file",
+          "value": "requirements.txt"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pypi/requests",
+      "name": "requests",
+      "purl": "pkg:pypi/requests",
+      "scope": "required",
+      "properties": [
+        {
+          "name": "chainsentry:risk-score",
+          "value": "5"
+        },
+        {
+          "name": "chainsentry:risk-band",
+          "value": "LOW"
+        },
+        {
+          "name": "chainsentry:direct",
+          "value": "true"
+        },
+        {
+          "name": "chainsentry:source-file",
+          "value": "requirements.txt"
+        },
+        {
+          "name": "chainsentry:finding",
+          "value": "UNPINNED"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pypi/pyyaml@5.3.1",
+      "name": "pyyaml",
+      "version": "5.3.1",
+      "purl": "pkg:pypi/pyyaml@5.3.1",
+      "scope": "required",
+      "properties": [
+        {
+          "name": "chainsentry:risk-score",
+          "value": "75"
+        },
+        {
+          "name": "chainsentry:risk-band",
+          "value": "CRITICAL"
+        },
+        {
+          "name": "chainsentry:direct",
+          "value": "true"
+        },
+        {
+          "name": "chainsentry:source-file",
+          "value": "requirements.txt"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pypi/python-dateutil@2.8.2",
+      "name": "python-dateutil",
+      "version": "2.8.2",
+      "purl": "pkg:pypi/python-dateutil@2.8.2",
+      "scope": "required",
+      "properties": [
+        {
+          "name": "chainsentry:risk-score",
+          "value": "10"
+        },
+        {
+          "name": "chainsentry:risk-band",
+          "value": "LOW"
+        },
+        {
+          "name": "chainsentry:direct",
+          "value": "true"
+        },
+        {
+          "name": "chainsentry:source-file",
+          "value": "requirements.txt"
+        },
+        {
+          "name": "chainsentry:finding",
+          "value": "ABANDONED"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pypi/urllib3@1.26.4",
+      "name": "urllib3",
+      "version": "1.26.4",
+      "purl": "pkg:pypi/urllib3@1.26.4",
+      "scope": "required",
+      "properties": [
+        {
+          "name": "chainsentry:risk-score",
+          "value": "60"
+        },
+        {
+          "name": "chainsentry:risk-band",
+          "value": "HIGH"
+        },
+        {
+          "name": "chainsentry:direct",
+          "value": "true"
+        },
+        {
+          "name": "chainsentry:source-file",
+          "value": "requirements.txt"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pypi/colourama@0.1.6",
+      "name": "colourama",
+      "version": "0.1.6",
+      "purl": "pkg:pypi/colourama@0.1.6",
+      "scope": "required",
+      "properties": [
+        {
+          "name": "chainsentry:risk-score",
+          "value": "70"
+        },
+        {
+          "name": "chainsentry:risk-band",
+          "value": "HIGH"
+        },
+        {
+          "name": "chainsentry:direct",
+          "value": "true"
+        },
+        {
+          "name": "chainsentry:source-file",
+          "value": "requirements.txt"
+        },
+        {
+          "name": "chainsentry:finding",
+          "value": "TYPOSQUAT"
+        },
+        {
+          "name": "chainsentry:finding",
+          "value": "NOT_IN_REGISTRY"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pypi/pytest@7.0.0",
+      "name": "pytest",
+      "version": "7.0.0",
+      "purl": "pkg:pypi/pytest@7.0.0",
+      "scope": "excluded",
+      "properties": [
+        {
+          "name": "chainsentry:risk-score",
+          "value": "25"
+        },
+        {
+          "name": "chainsentry:risk-band",
+          "value": "MEDIUM"
+        },
+        {
+          "name": "chainsentry:direct",
+          "value": "true"
+        },
+        {
+          "name": "chainsentry:source-file",
+          "value": "requirements-dev.txt"
+        }
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "ref": "project-root",
+      "dependsOn": [
+        "pkg:npm/express@4.17.1",
+        "pkg:npm/lodash@4.17.15",
+        "pkg:npm/left-pad@1.3.0",
+        "pkg:npm/internal-lib@1.0.0",
+        "pkg:npm/minimist@1.2.5",
+        "pkg:pypi/django@3.2.0",
+        "pkg:pypi/requests",
+        "pkg:pypi/pyyaml@5.3.1",
+        "pkg:pypi/python-dateutil@2.8.2",
+        "pkg:pypi/urllib3@1.26.4",
+        "pkg:pypi/colourama@0.1.6",
+        "pkg:pypi/pytest@7.0.0"
+      ]
+    }
+  ],
+  "vulnerabilities": [
+    {
+      "bom-ref": "GHSA-qw6h-vgh9-j6wx@pkg:npm/express@4.17.1",
+      "id": "GHSA-qw6h-vgh9-j6wx",
+      "source": {
+        "name": "OSV",
+        "url": "https://osv.dev/vulnerability/GHSA-qw6h-vgh9-j6wx"
+      },
+      "description": "express vulnerable to XSS via response.redirect()",
+      "affects": [
+        {
+          "ref": "pkg:npm/express@4.17.1"
+        }
+      ],
+      "references": [
+        {
+          "id": "CVE-2024-43796",
+          "source": {
+            "name": "NVD",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-43796"
+          }
+        }
+      ],
+      "ratings": [
+        {
+          "severity": "medium",
+          "score": 5.0,
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:L/I:L/A:L"
+        }
+      ],
+      "recommendation": "Upgrade to 4.20.0 or 5.0.0",
+      "published": "2024-09-10T19:41:04Z"
+    },
+    {
+      "bom-ref": "GHSA-rv95-896h-c2vc@pkg:npm/express@4.17.1",
+      "id": "GHSA-rv95-896h-c2vc",
+      "source": {
+        "name": "OSV",
+        "url": "https://osv.dev/vulnerability/GHSA-rv95-896h-c2vc"
+      },
+      "description": "Express.js Open Redirect in malformed URLs",
+      "affects": [
+        {
+          "ref": "pkg:npm/express@4.17.1"
+        }
+      ],
+      "references": [
+        {
+          "id": "CVE-2024-29041",
+          "source": {
+            "name": "NVD",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-29041"
+          }
+        }
+      ],
+      "ratings": [
+        {
+          "severity": "medium",
+          "score": 6.1,
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N"
+        }
+      ],
+      "recommendation": "Upgrade to 4.19.2 or 5.0.0-beta.3",
+      "published": "2024-03-25T19:40:26Z"
+    },
+    {
+      "bom-ref": "GHSA-29mw-wpgm-hmr9@pkg:npm/lodash@4.17.15",
+      "id": "GHSA-29mw-wpgm-hmr9",
+      "source": {
+        "name": "OSV",
+        "url": "https://osv.dev/vulnerability/GHSA-29mw-wpgm-hmr9"
+      },
+      "description": "Regular Expression Denial of Service (ReDoS) in lodash",
+      "affects": [
+        {
+          "ref": "pkg:npm/lodash@4.17.15"
+        }
+      ],
+      "references": [
+        {
+          "id": "CVE-2020-28500",
+          "source": {
+            "name": "NVD",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2020-28500"
+          }
+        }
+      ],
+      "ratings": [
+        {
+          "severity": "medium",
+          "score": 5.3,
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L"
+        }
+      ],
+      "recommendation": "Upgrade to 4.17.21",
+      "published": "2022-01-06T20:30:46Z"
+    },
+    {
+      "bom-ref": "GHSA-35jh-r3h4-6jhm@pkg:npm/lodash@4.17.15",
+      "id": "GHSA-35jh-r3h4-6jhm",
+      "source": {
+        "name": "OSV",
+        "url": "https://osv.dev/vulnerability/GHSA-35jh-r3h4-6jhm"
+      },
+      "description": "Command Injection in lodash",
+      "affects": [
+        {
+          "ref": "pkg:npm/lodash@4.17.15"
+        }
+      ],
+      "references": [
+        {
+          "id": "CVE-2021-23337",
+          "source": {
+            "name": "NVD",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-23337"
+          }
+        }
+      ],
+      "ratings": [
+        {
+          "severity": "high",
+          "score": 7.2,
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:U/C:H/I:H/A:H"
+        }
+      ],
+      "recommendation": "Upgrade to 4.17.21",
+      "published": "2021-05-06T16:05:51Z"
+    },
+    {
+      "bom-ref": "GHSA-f23m-r3pf-42rh@pkg:npm/lodash@4.17.15",
+      "id": "GHSA-f23m-r3pf-42rh",
+      "source": {
+        "name": "OSV",
+        "url": "https://osv.dev/vulnerability/GHSA-f23m-r3pf-42rh"
+      },
+      "description": "lodash vulnerable to Prototype Pollution via array path bypass in `_.unset` and `_.omit`",
+      "affects": [
+        {
+          "ref": "pkg:npm/lodash@4.17.15"
+        }
+      ],
+      "references": [
+        {
+          "id": "CVE-2026-2950",
+          "source": {
+            "name": "NVD",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-2950"
+          }
+        }
+      ],
+      "ratings": [
+        {
+          "severity": "medium",
+          "score": 6.5,
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:L"
+        }
+      ],
+      "recommendation": "Upgrade to 4.18.0",
+      "published": "2026-04-01T23:50:27Z"
+    },
+    {
+      "bom-ref": "GHSA-p6mc-m468-83gw@pkg:npm/lodash@4.17.15",
+      "id": "GHSA-p6mc-m468-83gw",
+      "source": {
+        "name": "OSV",
+        "url": "https://osv.dev/vulnerability/GHSA-p6mc-m468-83gw"
+      },
+      "description": "Prototype Pollution in lodash",
+      "affects": [
+        {
+          "ref": "pkg:npm/lodash@4.17.15"
+        }
+      ],
+      "references": [
+        {
+          "id": "CVE-2020-8203",
+          "source": {
+            "name": "NVD",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2020-8203"
+          }
+        }
+      ],
+      "ratings": [
+        {
+          "severity": "high",
+          "score": 7.4,
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:H/A:H"
+        }
+      ],
+      "recommendation": "Upgrade to 4.17.19",
+      "published": "2020-07-15T19:15:48Z"
+    },
+    {
+      "bom-ref": "GHSA-r5fr-rjxr-66jc@pkg:npm/lodash@4.17.15",
+      "id": "GHSA-r5fr-rjxr-66jc",
+      "source": {
+        "name": "OSV",
+        "url": "https://osv.dev/vulnerability/GHSA-r5fr-rjxr-66jc"
+      },
+      "description": "lodash vulnerable to Code Injection via `_.template` imports key names",
+      "affects": [
+        {
+          "ref": "pkg:npm/lodash@4.17.15"
+        }
+      ],
+      "references": [
+        {
+          "id": "CVE-2026-4800",
+          "source": {
+            "name": "NVD",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-4800"
+          }
+        }
+      ],
+      "ratings": [
+        {
+          "severity": "high",
+          "score": 8.1,
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H"
+        }
+      ],
+      "recommendation": "Upgrade to 4.18.0",
+      "published": "2026-04-01T23:51:12Z"
+    },
+    {
+      "bom-ref": "GHSA-xxjr-mmjv-4gpg@pkg:npm/lodash@4.17.15",
+      "id": "GHSA-xxjr-mmjv-4gpg",
+      "source": {
+        "name": "OSV",
+        "url": "https://osv.dev/vulnerability/GHSA-xxjr-mmjv-4gpg"
+      },
+      "description": "Lodash has Prototype Pollution Vulnerability in `_.unset` and `_.omit` functions",
+      "affects": [
+        {
+          "ref": "pkg:npm/lodash@4.17.15"
+        }
+      ],
+      "references": [
+        {
+          "id": "CVE-2025-13465",
+          "source": {
+            "name": "NVD",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-13465"
+          }
+        }
+      ],
+      "ratings": [
+        {
+          "severity": "medium",
+          "score": 6.5,
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:L"
+        }
+      ],
+      "recommendation": "Upgrade to 4.17.23",
+      "published": "2026-01-21T23:01:22Z"
+    },
+    {
+      "bom-ref": "GHSA-xvch-5gv4-984h@pkg:npm/minimist@1.2.5",
+      "id": "GHSA-xvch-5gv4-984h",
+      "source": {
+        "name": "OSV",
+        "url": "https://osv.dev/vulnerability/GHSA-xvch-5gv4-984h"
+      },
+      "description": "Prototype Pollution in minimist",
+      "affects": [
+        {
+          "ref": "pkg:npm/minimist@1.2.5"
+        }
+      ],
+      "references": [
+        {
+          "id": "CVE-2021-44906",
+          "source": {
+            "name": "NVD",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-44906"
+          }
+        }
+      ],
+      "ratings": [
+        {
+          "severity": "critical",
+          "score": 9.8,
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+        }
+      ],
+      "recommendation": "Upgrade to 1.2.6 or 0.2.4",
+      "published": "2022-03-18T00:01:09Z"
+    },
+    {
+      "bom-ref": "GHSA-2gwj-7jmv-h26r@pkg:pypi/django@3.2.0",
+      "id": "GHSA-2gwj-7jmv-h26r",
+      "source": {
+        "name": "OSV",
+        "url": "https://osv.dev/vulnerability/GHSA-2gwj-7jmv-h26r"
+      },
+      "description": "SQL Injection in Django",
+      "affects": [
+        {
+          "ref": "pkg:pypi/django@3.2.0"
+        }
+      ],
+      "references": [
+        {
+          "id": "BIT-django-2022-28346",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/BIT-django-2022-28346"
+          }
+        },
+        {
+          "id": "CVE-2022-28346",
+          "source": {
+            "name": "NVD",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2022-28346"
+          }
+        },
+        {
+          "id": "PYSEC-2022-190",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/PYSEC-2022-190"
+          }
+        }
+      ],
+      "ratings": [
+        {
+          "severity": "critical",
+          "score": 9.8,
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+        }
+      ],
+      "recommendation": "Upgrade to 2.2.28 or 3.2.13 or 4.0.4",
+      "published": "2022-04-13T00:00:33Z"
+    },
+    {
+      "bom-ref": "GHSA-2hrw-hx67-34x6@pkg:pypi/django@3.2.0",
+      "id": "GHSA-2hrw-hx67-34x6",
+      "source": {
+        "name": "OSV",
+        "url": "https://osv.dev/vulnerability/GHSA-2hrw-hx67-34x6"
+      },
+      "description": "Resource exhaustion in Django",
+      "affects": [
+        {
+          "ref": "pkg:pypi/django@3.2.0"
+        }
+      ],
+      "references": [
+        {
+          "id": "BIT-django-2023-24580",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/BIT-django-2023-24580"
+          }
+        },
+        {
+          "id": "CVE-2023-24580",
+          "source": {
+            "name": "NVD",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-24580"
+          }
+        },
+        {
+          "id": "PYSEC-2023-13",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/PYSEC-2023-13"
+          }
+        }
+      ],
+      "ratings": [
+        {
+          "severity": "high",
+          "score": 7.5,
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        }
+      ],
+      "recommendation": "Upgrade to 3.2.18 or 4.1.7 or 4.0.10",
+      "published": "2023-02-15T03:30:47Z"
+    },
+    {
+      "bom-ref": "GHSA-3h9f-r86x-qvjx@pkg:pypi/django@3.2.0",
+      "id": "GHSA-3h9f-r86x-qvjx",
+      "source": {
+        "name": "OSV",
+        "url": "https://osv.dev/vulnerability/GHSA-3h9f-r86x-qvjx"
+      },
+      "description": "Django: cache middleware may expose private responses when unrelated request cookies are present",
+      "affects": [
+        {
+          "ref": "pkg:pypi/django@3.2.0"
+        }
+      ],
+      "references": [
+        {
+          "id": "BIT-django-2026-48588",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/BIT-django-2026-48588"
+          }
+        },
+        {
+          "id": "CVE-2026-48588",
+          "source": {
+            "name": "NVD",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-48588"
+          }
+        },
+        {
+          "id": "PYSEC-2026-2090",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/PYSEC-2026-2090"
+          }
+        }
+      ],
+      "ratings": [
+        {
+          "severity": "low",
+          "score": 3.1,
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:L/I:N/A:N"
+        }
+      ],
+      "recommendation": "Upgrade to 5.2.16 or 6.0.7",
+      "published": "2026-07-07T15:32:57Z"
+    },
+    {
+      "bom-ref": "GHSA-53qw-q765-4fww@pkg:pypi/django@3.2.0",
+      "id": "GHSA-53qw-q765-4fww",
+      "source": {
+        "name": "OSV",
+        "url": "https://osv.dev/vulnerability/GHSA-53qw-q765-4fww"
+      },
+      "description": "Denial-of-service in Django",
+      "affects": [
+        {
+          "ref": "pkg:pypi/django@3.2.0"
+        }
+      ],
+      "references": [
+        {
+          "id": "BIT-django-2021-45115",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/BIT-django-2021-45115"
+          }
+        },
+        {
+          "id": "CVE-2021-45115",
+          "source": {
+            "name": "NVD",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-45115"
+          }
+        },
+        {
+          "id": "PYSEC-2022-1",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/PYSEC-2022-1"
+          }
+        }
+      ],
+      "ratings": [
+        {
+          "severity": "high",
+          "score": 7.5,
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        }
+      ],
+      "recommendation": "Upgrade to 2.2.26 or 3.2.11 or 4.0.1",
+      "published": "2022-01-12T19:20:53Z"
+    },
+    {
+      "bom-ref": "GHSA-68w8-qjq3-2gfm@pkg:pypi/django@3.2.0",
+      "id": "GHSA-68w8-qjq3-2gfm",
+      "source": {
+        "name": "OSV",
+        "url": "https://osv.dev/vulnerability/GHSA-68w8-qjq3-2gfm"
+      },
+      "description": "Path Traversal in Django",
+      "affects": [
+        {
+          "ref": "pkg:pypi/django@3.2.0"
+        }
+      ],
+      "references": [
+        {
+          "id": "BIT-django-2021-33203",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/BIT-django-2021-33203"
+          }
+        },
+        {
+          "id": "CVE-2021-33203",
+          "source": {
+            "name": "NVD",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-33203"
+          }
+        },
+        {
+          "id": "PYSEC-2021-98",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/PYSEC-2021-98"
+          }
+        }
+      ],
+      "ratings": [
+        {
+          "severity": "medium",
+          "score": 4.9,
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:U/C:H/I:N/A:N"
+        }
+      ],
+      "recommendation": "Upgrade to 2.2.24 or 3.1.12 or 3.2.4",
+      "published": "2021-06-10T17:21:00Z"
+    },
+    {
+      "bom-ref": "GHSA-6cw3-g6wv-c2xv@pkg:pypi/django@3.2.0",
+      "id": "GHSA-6cw3-g6wv-c2xv",
+      "source": {
+        "name": "OSV",
+        "url": "https://osv.dev/vulnerability/GHSA-6cw3-g6wv-c2xv"
+      },
+      "description": "Infinite Loop in Django",
+      "affects": [
+        {
+          "ref": "pkg:pypi/django@3.2.0"
+        }
+      ],
+      "references": [
+        {
+          "id": "BIT-django-2022-23833",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/BIT-django-2022-23833"
+          }
+        },
+        {
+          "id": "CVE-2022-23833",
+          "source": {
+            "name": "NVD",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2022-23833"
+          }
+        },
+        {
+          "id": "PYSEC-2022-20",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/PYSEC-2022-20"
+          }
+        }
+      ],
+      "ratings": [
+        {
+          "severity": "high",
+          "score": 7.5,
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        }
+      ],
+      "recommendation": "Upgrade to 2.2.27 or 3.2.12 or 4.0.2",
+      "published": "2022-02-04T00:00:26Z"
+    },
+    {
+      "bom-ref": "GHSA-6w2r-r2m5-xq5w@pkg:pypi/django@3.2.0",
+      "id": "GHSA-6w2r-r2m5-xq5w",
+      "source": {
+        "name": "OSV",
+        "url": "https://osv.dev/vulnerability/GHSA-6w2r-r2m5-xq5w"
+      },
+      "description": "Django is subject to SQL injection through its column aliases",
+      "affects": [
+        {
+          "ref": "pkg:pypi/django@3.2.0"
+        }
+      ],
+      "references": [
+        {
+          "id": "BIT-django-2025-57833",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/BIT-django-2025-57833"
+          }
+        },
+        {
+          "id": "CVE-2025-57833",
+          "source": {
+            "name": "NVD",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-57833"
+          }
+        },
+        {
+          "id": "PYSEC-2025-105",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/PYSEC-2025-105"
+          }
+        }
+      ],
+      "ratings": [
+        {
+          "severity": "high",
+          "score": 7.1,
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:C/C:H/I:L/A:N"
+        }
+      ],
+      "recommendation": "Upgrade to 4.2.24 or 5.1.12 or 5.2.6",
+      "published": "2025-09-08T18:31:31Z"
+    },
+    {
+      "bom-ref": "GHSA-7h4p-27mh-hmrw@pkg:pypi/django@3.2.0",
+      "id": "GHSA-7h4p-27mh-hmrw",
+      "source": {
+        "name": "OSV",
+        "url": "https://osv.dev/vulnerability/GHSA-7h4p-27mh-hmrw"
+      },
+      "description": "Django Denial of service vulnerability in django.utils.encoding.uri_to_iri",
+      "affects": [
+        {
+          "ref": "pkg:pypi/django@3.2.0"
+        }
+      ],
+      "references": [
+        {
+          "id": "BIT-django-2023-41164",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/BIT-django-2023-41164"
+          }
+        },
+        {
+          "id": "CVE-2023-41164",
+          "source": {
+            "name": "NVD",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-41164"
+          }
+        },
+        {
+          "id": "PYSEC-2023-225",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/PYSEC-2023-225"
+          }
+        }
+      ],
+      "ratings": [
+        {
+          "severity": "medium",
+          "score": 5.3,
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L"
+        }
+      ],
+      "recommendation": "Upgrade to 3.2.21 or 4.1.11 or 4.2.5",
+      "published": "2023-11-03T06:36:29Z"
+    },
+    {
+      "bom-ref": "GHSA-7xr5-9hcq-chf9@pkg:pypi/django@3.2.0",
+      "id": "GHSA-7xr5-9hcq-chf9",
+      "source": {
+        "name": "OSV",
+        "url": "https://osv.dev/vulnerability/GHSA-7xr5-9hcq-chf9"
+      },
+      "description": "Django Improper Output Neutralization for Logs vulnerability",
+      "affects": [
+        {
+          "ref": "pkg:pypi/django@3.2.0"
+        }
+      ],
+      "references": [
+        {
+          "id": "BIT-django-2025-48432",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/BIT-django-2025-48432"
+          }
+        },
+        {
+          "id": "CVE-2025-48432",
+          "source": {
+            "name": "NVD",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-48432"
+          }
+        },
+        {
+          "id": "PYSEC-2025-47",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/PYSEC-2025-47"
+          }
+        }
+      ],
+      "ratings": [
+        {
+          "severity": "medium",
+          "score": 4.0,
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:C/C:N/I:L/A:N"
+        }
+      ],
+      "recommendation": "Upgrade to 5.2.2 or 5.1.10 or 4.2.22",
+      "published": "2025-06-05T03:30:58Z"
+    },
+    {
+      "bom-ref": "GHSA-8c5j-9r9f-c6w8@pkg:pypi/django@3.2.0",
+      "id": "GHSA-8c5j-9r9f-c6w8",
+      "source": {
+        "name": "OSV",
+        "url": "https://osv.dev/vulnerability/GHSA-8c5j-9r9f-c6w8"
+      },
+      "description": "Information disclosure in Django",
+      "affects": [
+        {
+          "ref": "pkg:pypi/django@3.2.0"
+        }
+      ],
+      "references": [
+        {
+          "id": "BIT-django-2021-45116",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/BIT-django-2021-45116"
+          }
+        },
+        {
+          "id": "CVE-2021-45116",
+          "source": {
+            "name": "NVD",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-45116"
+          }
+        },
+        {
+          "id": "PYSEC-2022-2",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/PYSEC-2022-2"
+          }
+        }
+      ],
+      "ratings": [
+        {
+          "severity": "high",
+          "score": 7.5,
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N"
+        }
+      ],
+      "recommendation": "Upgrade to 2.2.26 or 3.2.11 or 4.0.1",
+      "published": "2022-01-12T19:21:10Z"
+    },
+    {
+      "bom-ref": "GHSA-8cjm-8mp7-r2xf@pkg:pypi/django@3.2.0",
+      "id": "GHSA-8cjm-8mp7-r2xf",
+      "source": {
+        "name": "OSV",
+        "url": "https://osv.dev/vulnerability/GHSA-8cjm-8mp7-r2xf"
+      },
+      "description": "Django: UpdateCacheMiddleware may disclose cached responses due to case-sensitive Cache-Control handling",
+      "affects": [
+        {
+          "ref": "pkg:pypi/django@3.2.0"
+        }
+      ],
+      "references": [
+        {
+          "id": "BIT-django-2026-8404",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/BIT-django-2026-8404"
+          }
+        },
+        {
+          "id": "CVE-2026-8404",
+          "source": {
+            "name": "NVD",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-8404"
+          }
+        },
+        {
+          "id": "PYSEC-2026-201",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/PYSEC-2026-201"
+          }
+        }
+      ],
+      "ratings": [
+        {
+          "severity": "low",
+          "score": 3.1,
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:L/I:N/A:N"
+        }
+      ],
+      "recommendation": "Upgrade to 5.2.15 or 6.0.6",
+      "published": "2026-06-03T15:30:43Z"
+    },
+    {
+      "bom-ref": "GHSA-8qcx-xf44-272x@pkg:pypi/django@3.2.0",
+      "id": "GHSA-8qcx-xf44-272x",
+      "source": {
+        "name": "OSV",
+        "url": "https://osv.dev/vulnerability/GHSA-8qcx-xf44-272x"
+      },
+      "description": "Django: DomainNameValidator permits newline characters that may enable HTTP header injection",
+      "affects": [
+        {
+          "ref": "pkg:pypi/django@3.2.0"
+        }
+      ],
+      "references": [
+        {
+          "id": "BIT-django-2026-53878",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/BIT-django-2026-53878"
+          }
+        },
+        {
+          "id": "CVE-2026-53878",
+          "source": {
+            "name": "NVD",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-53878"
+          }
+        },
+        {
+          "id": "PYSEC-2026-2092",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/PYSEC-2026-2092"
+          }
+        }
+      ],
+      "ratings": [
+        {
+          "severity": "medium",
+          "score": 6.1,
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N"
+        }
+      ],
+      "recommendation": "Upgrade to 5.2.16 or 6.0.7",
+      "published": "2026-07-07T15:32:57Z"
+    },
+    {
+      "bom-ref": "GHSA-8x94-hmjh-97hq@pkg:pypi/django@3.2.0",
+      "id": "GHSA-8x94-hmjh-97hq",
+      "source": {
+        "name": "OSV",
+        "url": "https://osv.dev/vulnerability/GHSA-8x94-hmjh-97hq"
+      },
+      "description": "Django vulnerable to Reflected File Download attack",
+      "affects": [
+        {
+          "ref": "pkg:pypi/django@3.2.0"
+        }
+      ],
+      "references": [
+        {
+          "id": "BIT-django-2022-36359",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/BIT-django-2022-36359"
+          }
+        },
+        {
+          "id": "CVE-2022-36359",
+          "source": {
+            "name": "NVD",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2022-36359"
+          }
+        },
+        {
+          "id": "PYSEC-2022-245",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/PYSEC-2022-245"
+          }
+        }
+      ],
+      "ratings": [
+        {
+          "severity": "high",
+          "score": 8.8,
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H"
+        }
+      ],
+      "recommendation": "Upgrade to 3.2.15 or 4.0.7",
+      "published": "2022-08-11T14:49:12Z"
+    },
+    {
+      "bom-ref": "GHSA-923m-gv2p-w5qp@pkg:pypi/django@3.2.0",
+      "id": "GHSA-923m-gv2p-w5qp",
+      "source": {
+        "name": "OSV",
+        "url": "https://osv.dev/vulnerability/GHSA-923m-gv2p-w5qp"
+      },
+      "description": "Django: has_vary_header may expose cached responses when Vary values contain whitespace",
+      "affects": [
+        {
+          "ref": "pkg:pypi/django@3.2.0"
+        }
+      ],
+      "references": [
+        {
+          "id": "BIT-django-2026-48587",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/BIT-django-2026-48587"
+          }
+        },
+        {
+          "id": "CVE-2026-48587",
+          "source": {
+            "name": "NVD",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-48587"
+          }
+        },
+        {
+          "id": "PYSEC-2026-198",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/PYSEC-2026-198"
+          }
+        }
+      ],
+      "ratings": [
+        {
+          "severity": "low",
+          "score": 3.1,
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:L/I:N/A:N"
+        }
+      ],
+      "recommendation": "Upgrade to 5.2.15 or 6.0.6",
+      "published": "2026-06-03T15:30:43Z"
+    },
+    {
+      "bom-ref": "GHSA-95rw-fx8r-36v6@pkg:pypi/django@3.2.0",
+      "id": "GHSA-95rw-fx8r-36v6",
+      "source": {
+        "name": "OSV",
+        "url": "https://osv.dev/vulnerability/GHSA-95rw-fx8r-36v6"
+      },
+      "description": "Cross-site Scripting in Django",
+      "affects": [
+        {
+          "ref": "pkg:pypi/django@3.2.0"
+        }
+      ],
+      "references": [
+        {
+          "id": "BIT-django-2022-22818",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/BIT-django-2022-22818"
+          }
+        },
+        {
+          "id": "CVE-2022-22818",
+          "source": {
+            "name": "NVD",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2022-22818"
+          }
+        },
+        {
+          "id": "PYSEC-2022-19",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/PYSEC-2022-19"
+          }
+        }
+      ],
+      "ratings": [
+        {
+          "severity": "medium",
+          "score": 6.1,
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N"
+        }
+      ],
+      "recommendation": "Upgrade to 2.2.27 or 3.2.12 or 4.0.2",
+      "published": "2022-02-04T00:00:33Z"
+    },
+    {
+      "bom-ref": "GHSA-crhf-3pfg-w68w@pkg:pypi/django@3.2.0",
+      "id": "GHSA-crhf-3pfg-w68w",
+      "source": {
+        "name": "OSV",
+        "url": "https://osv.dev/vulnerability/GHSA-crhf-3pfg-w68w"
+      },
+      "description": " Django: GDALRaster may over-read heap memory when constructed from bytes",
+      "affects": [
+        {
+          "ref": "pkg:pypi/django@3.2.0"
+        }
+      ],
+      "references": [
+        {
+          "id": "BIT-django-2026-53877",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/BIT-django-2026-53877"
+          }
+        },
+        {
+          "id": "CVE-2026-53877",
+          "source": {
+            "name": "NVD",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-53877"
+          }
+        },
+        {
+          "id": "PYSEC-2026-2091",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/PYSEC-2026-2091"
+          }
+        }
+      ],
+      "ratings": [
+        {
+          "severity": "medium",
+          "score": 4.8,
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:N/A:L"
+        }
+      ],
+      "recommendation": "Upgrade to 5.2.16 or 6.0.7",
+      "published": "2026-07-07T15:32:57Z"
+    },
+    {
+      "bom-ref": "GHSA-frmv-pr5f-9mcr@pkg:pypi/django@3.2.0",
+      "id": "GHSA-frmv-pr5f-9mcr",
+      "source": {
+        "name": "OSV",
+        "url": "https://osv.dev/vulnerability/GHSA-frmv-pr5f-9mcr"
+      },
+      "description": "Django vulnerable to SQL injection via _connector keyword argument in QuerySet and Q objects.",
+      "affects": [
+        {
+          "ref": "pkg:pypi/django@3.2.0"
+        }
+      ],
+      "references": [
+        {
+          "id": "BIT-django-2025-64459",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/BIT-django-2025-64459"
+          }
+        },
+        {
+          "id": "CVE-2025-64459",
+          "source": {
+            "name": "NVD",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-64459"
+          }
+        },
+        {
+          "id": "PYSEC-2025-108",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/PYSEC-2025-108"
+          }
+        }
+      ],
+      "ratings": [
+        {
+          "severity": "critical",
+          "score": 9.1,
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N"
+        }
+      ],
+      "recommendation": "Upgrade to 5.2.8 or 5.1.14 or 4.2.26",
+      "published": "2025-11-05T15:31:07Z"
+    },
+    {
+      "bom-ref": "GHSA-h7pc-vwp9-298g@pkg:pypi/django@3.2.0",
+      "id": "GHSA-h7pc-vwp9-298g",
+      "source": {
+        "name": "OSV",
+        "url": "https://osv.dev/vulnerability/GHSA-h7pc-vwp9-298g"
+      },
+      "description": "Django: signed cookies are vulnerable to salt namespace collisions",
+      "affects": [
+        {
+          "ref": "pkg:pypi/django@3.2.0"
+        }
+      ],
+      "references": [
+        {
+          "id": "BIT-django-2026-6873",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/BIT-django-2026-6873"
+          }
+        },
+        {
+          "id": "CVE-2026-6873",
+          "source": {
+            "name": "NVD",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-6873"
+          }
+        },
+        {
+          "id": "PYSEC-2026-199",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/PYSEC-2026-199"
+          }
+        }
+      ],
+      "ratings": [
+        {
+          "severity": "low",
+          "score": 3.1,
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:U/C:L/I:N/A:N"
+        }
+      ],
+      "recommendation": "Upgrade to 5.2.15 or 6.0.6",
+      "published": "2026-06-03T15:30:43Z"
+    },
+    {
+      "bom-ref": "GHSA-h8gc-pgj2-vjm3@pkg:pypi/django@3.2.0",
+      "id": "GHSA-h8gc-pgj2-vjm3",
+      "source": {
+        "name": "OSV",
+        "url": "https://osv.dev/vulnerability/GHSA-h8gc-pgj2-vjm3"
+      },
+      "description": "Django Denial-of-service in django.utils.text.Truncator",
+      "affects": [
+        {
+          "ref": "pkg:pypi/django@3.2.0"
+        }
+      ],
+      "references": [
+        {
+          "id": "BIT-django-2023-43665",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/BIT-django-2023-43665"
+          }
+        },
+        {
+          "id": "CVE-2023-43665",
+          "source": {
+            "name": "NVD",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-43665"
+          }
+        },
+        {
+          "id": "PYSEC-2023-226",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/PYSEC-2023-226"
+          }
+        }
+      ],
+      "ratings": [
+        {
+          "severity": "medium",
+          "score": 5.9,
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        }
+      ],
+      "recommendation": "Upgrade to 3.2.22 or 4.1.12 or 4.2.6",
+      "published": "2023-11-03T06:36:30Z"
+    },
+    {
+      "bom-ref": "GHSA-jh3w-4vvf-mjgr@pkg:pypi/django@3.2.0",
+      "id": "GHSA-jh3w-4vvf-mjgr",
+      "source": {
+        "name": "OSV",
+        "url": "https://osv.dev/vulnerability/GHSA-jh3w-4vvf-mjgr"
+      },
+      "description": "Django has regular expression denial of service vulnerability in EmailValidator/URLValidator",
+      "affects": [
+        {
+          "ref": "pkg:pypi/django@3.2.0"
+        }
+      ],
+      "references": [
+        {
+          "id": "BIT-django-2023-36053",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/BIT-django-2023-36053"
+          }
+        },
+        {
+          "id": "CVE-2023-36053",
+          "source": {
+            "name": "NVD",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-36053"
+          }
+        },
+        {
+          "id": "PYSEC-2023-100",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/PYSEC-2023-100"
+          }
+        }
+      ],
+      "ratings": [
+        {
+          "severity": "high",
+          "score": 7.5,
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        }
+      ],
+      "recommendation": "Upgrade to 3.2.20 or 4.1.10 or 4.2.3",
+      "published": "2023-07-03T15:30:45Z"
+    },
+    {
+      "bom-ref": "GHSA-jrh2-hc4r-7jwx@pkg:pypi/django@3.2.0",
+      "id": "GHSA-jrh2-hc4r-7jwx",
+      "source": {
+        "name": "OSV",
+        "url": "https://osv.dev/vulnerability/GHSA-jrh2-hc4r-7jwx"
+      },
+      "description": "Directory-traversal in Django",
+      "affects": [
+        {
+          "ref": "pkg:pypi/django@3.2.0"
+        }
+      ],
+      "references": [
+        {
+          "id": "BIT-django-2021-45452",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/BIT-django-2021-45452"
+          }
+        },
+        {
+          "id": "CVE-2021-45452",
+          "source": {
+            "name": "NVD",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-45452"
+          }
+        },
+        {
+          "id": "PYSEC-2022-3",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/PYSEC-2022-3"
+          }
+        }
+      ],
+      "ratings": [
+        {
+          "severity": "medium",
+          "score": 5.3,
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N"
+        }
+      ],
+      "recommendation": "Upgrade to 2.2.26 or 3.2.11 or 4.0.1",
+      "published": "2022-01-12T19:21:04Z"
+    },
+    {
+      "bom-ref": "GHSA-p64x-8rxx-wf6q@pkg:pypi/django@3.2.0",
+      "id": "GHSA-p64x-8rxx-wf6q",
+      "source": {
+        "name": "OSV",
+        "url": "https://osv.dev/vulnerability/GHSA-p64x-8rxx-wf6q"
+      },
+      "description": "Django `Trunc()` and `Extract()` database functions vulnerable to SQL Injection",
+      "affects": [
+        {
+          "ref": "pkg:pypi/django@3.2.0"
+        }
+      ],
+      "references": [
+        {
+          "id": "BIT-django-2022-34265",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/BIT-django-2022-34265"
+          }
+        },
+        {
+          "id": "CVE-2022-34265",
+          "source": {
+            "name": "NVD",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2022-34265"
+          }
+        },
+        {
+          "id": "PYSEC-2022-213",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/PYSEC-2022-213"
+          }
+        }
+      ],
+      "ratings": [
+        {
+          "severity": "critical",
+          "score": 9.8,
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+        }
+      ],
+      "recommendation": "Upgrade to 3.2.14 or 4.0.6",
+      "published": "2022-07-05T00:00:53Z"
+    },
+    {
+      "bom-ref": "GHSA-p99v-5w3c-jqq9@pkg:pypi/django@3.2.0",
+      "id": "GHSA-p99v-5w3c-jqq9",
+      "source": {
+        "name": "OSV",
+        "url": "https://osv.dev/vulnerability/GHSA-p99v-5w3c-jqq9"
+      },
+      "description": "Django Access Control Bypass possibly leading to SSRF, RFI, and LFI attacks ",
+      "affects": [
+        {
+          "ref": "pkg:pypi/django@3.2.0"
+        }
+      ],
+      "references": [
+        {
+          "id": "BIT-django-2021-33571",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/BIT-django-2021-33571"
+          }
+        },
+        {
+          "id": "CVE-2021-33571",
+          "source": {
+            "name": "NVD",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-33571"
+          }
+        },
+        {
+          "id": "PYSEC-2021-99",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/PYSEC-2021-99"
+          }
+        }
+      ],
+      "ratings": [
+        {
+          "severity": "high",
+          "score": 7.5,
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N"
+        }
+      ],
+      "recommendation": "Upgrade to 2.2.24 or 3.1.12 or 3.2.4",
+      "published": "2021-06-10T17:21:12Z"
+    },
+    {
+      "bom-ref": "GHSA-q238-5cxm-5c9h@pkg:pypi/django@3.2.0",
+      "id": "GHSA-q238-5cxm-5c9h",
+      "source": {
+        "name": "OSV",
+        "url": "https://osv.dev/vulnerability/GHSA-q238-5cxm-5c9h"
+      },
+      "description": "Django GeoDjango vulnerable to denial of service through deeply nested geometry collections",
+      "affects": [
+        {
+          "ref": "pkg:pypi/django@3.2.0"
+        }
+      ],
+      "references": [
+        {
+          "id": "BIT-django-2026-15830",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/BIT-django-2026-15830"
+          }
+        },
+        {
+          "id": "CVE-2026-15830",
+          "source": {
+            "name": "NVD",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-15830"
+          }
+        },
+        {
+          "id": "PYSEC-2026-3717",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/PYSEC-2026-3717"
+          }
+        }
+      ],
+      "ratings": [
+        {
+          "severity": "medium",
+          "score": 5.3,
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L"
+        }
+      ],
+      "recommendation": "Upgrade to 5.2.17 or 6.0.8 or 6.1.1",
+      "published": "2026-08-04T18:31:27Z"
+    },
+    {
+      "bom-ref": "GHSA-q2jf-h9jm-m7p4@pkg:pypi/django@3.2.0",
+      "id": "GHSA-q2jf-h9jm-m7p4",
+      "source": {
+        "name": "OSV",
+        "url": "https://osv.dev/vulnerability/GHSA-q2jf-h9jm-m7p4"
+      },
+      "description": "Django contains Uncontrolled Resource Consumption via cached header",
+      "affects": [
+        {
+          "ref": "pkg:pypi/django@3.2.0"
+        }
+      ],
+      "references": [
+        {
+          "id": "BIT-django-2023-23969",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/BIT-django-2023-23969"
+          }
+        },
+        {
+          "id": "CVE-2023-23969",
+          "source": {
+            "name": "NVD",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-23969"
+          }
+        },
+        {
+          "id": "PYSEC-2023-12",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/PYSEC-2023-12"
+          }
+        }
+      ],
+      "ratings": [
+        {
+          "severity": "high",
+          "score": 7.5,
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        }
+      ],
+      "recommendation": "Upgrade to 3.2.17 or 4.0.9 or 4.1.6",
+      "published": "2023-02-01T21:30:23Z"
+    },
+    {
+      "bom-ref": "GHSA-qm57-vhq3-3fwf@pkg:pypi/django@3.2.0",
+      "id": "GHSA-qm57-vhq3-3fwf",
+      "source": {
+        "name": "OSV",
+        "url": "https://osv.dev/vulnerability/GHSA-qm57-vhq3-3fwf"
+      },
+      "description": "Header injection possible in Django",
+      "affects": [
+        {
+          "ref": "pkg:pypi/django@3.2.0"
+        }
+      ],
+      "references": [
+        {
+          "id": "BIT-django-2021-32052",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/BIT-django-2021-32052"
+          }
+        },
+        {
+          "id": "CVE-2021-32052",
+          "source": {
+            "name": "NVD",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-32052"
+          }
+        },
+        {
+          "id": "PYSEC-2021-8",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/PYSEC-2021-8"
+          }
+        }
+      ],
+      "ratings": [
+        {
+          "severity": "medium",
+          "score": 6.1,
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N"
+        }
+      ],
+      "recommendation": "Upgrade to 2.2.22 or 3.1.10 or 3.2.2",
+      "published": "2021-06-09T17:14:51Z"
+    },
+    {
+      "bom-ref": "GHSA-qmf9-6jqf-j8fq@pkg:pypi/django@3.2.0",
+      "id": "GHSA-qmf9-6jqf-j8fq",
+      "source": {
+        "name": "OSV",
+        "url": "https://osv.dev/vulnerability/GHSA-qmf9-6jqf-j8fq"
+      },
+      "description": "Django potential denial of service vulnerability in UsernameField on Windows",
+      "affects": [
+        {
+          "ref": "pkg:pypi/django@3.2.0"
+        }
+      ],
+      "references": [
+        {
+          "id": "BIT-django-2023-46695",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/BIT-django-2023-46695"
+          }
+        },
+        {
+          "id": "CVE-2023-46695",
+          "source": {
+            "name": "NVD",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-46695"
+          }
+        },
+        {
+          "id": "PYSEC-2023-222",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/PYSEC-2023-222"
+          }
+        }
+      ],
+      "ratings": [
+        {
+          "severity": "high",
+          "score": 7.5,
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        }
+      ],
+      "recommendation": "Upgrade to 3.2.23 or 4.1.13 or 4.2.7",
+      "published": "2023-11-02T06:30:25Z"
+    },
+    {
+      "bom-ref": "GHSA-qrw5-5h28-6cmg@pkg:pypi/django@3.2.0",
+      "id": "GHSA-qrw5-5h28-6cmg",
+      "source": {
+        "name": "OSV",
+        "url": "https://osv.dev/vulnerability/GHSA-qrw5-5h28-6cmg"
+      },
+      "description": "Django denial-of-service vulnerability in internationalized URLs",
+      "affects": [
+        {
+          "ref": "pkg:pypi/django@3.2.0"
+        }
+      ],
+      "references": [
+        {
+          "id": "BIT-django-2022-41323",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/BIT-django-2022-41323"
+          }
+        },
+        {
+          "id": "CVE-2022-41323",
+          "source": {
+            "name": "NVD",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2022-41323"
+          }
+        },
+        {
+          "id": "PYSEC-2022-304",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/PYSEC-2022-304"
+          }
+        }
+      ],
+      "ratings": [
+        {
+          "severity": "high",
+          "score": 7.5,
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        }
+      ],
+      "recommendation": "Upgrade to 3.2.16 or 4.0.8 or 4.1.2",
+      "published": "2022-10-16T12:00:23Z"
+    },
+    {
+      "bom-ref": "GHSA-qw25-v68c-qjf3@pkg:pypi/django@3.2.0",
+      "id": "GHSA-qw25-v68c-qjf3",
+      "source": {
+        "name": "OSV",
+        "url": "https://osv.dev/vulnerability/GHSA-qw25-v68c-qjf3"
+      },
+      "description": "Django has a denial-of-service vulnerability in HttpResponseRedirect and HttpResponsePermanentRedirect on Windows",
+      "affects": [
+        {
+          "ref": "pkg:pypi/django@3.2.0"
+        }
+      ],
+      "references": [
+        {
+          "id": "BIT-django-2025-64458",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/BIT-django-2025-64458"
+          }
+        },
+        {
+          "id": "CVE-2025-64458",
+          "source": {
+            "name": "NVD",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-64458"
+          }
+        },
+        {
+          "id": "PYSEC-2025-107",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/PYSEC-2025-107"
+          }
+        }
+      ],
+      "ratings": [
+        {
+          "severity": "high",
+          "score": 7.5,
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        }
+      ],
+      "recommendation": "Upgrade to 5.2.8 or 5.1.14 or 4.2.26",
+      "published": "2025-11-05T15:31:07Z"
+    },
+    {
+      "bom-ref": "GHSA-r3xc-prgr-mg9p@pkg:pypi/django@3.2.0",
+      "id": "GHSA-r3xc-prgr-mg9p",
+      "source": {
+        "name": "OSV",
+        "url": "https://osv.dev/vulnerability/GHSA-r3xc-prgr-mg9p"
+      },
+      "description": "Django bypasses validation when using one form field to upload multiple files",
+      "affects": [
+        {
+          "ref": "pkg:pypi/django@3.2.0"
+        }
+      ],
+      "references": [
+        {
+          "id": "BIT-django-2023-31047",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/BIT-django-2023-31047"
+          }
+        },
+        {
+          "id": "CVE-2023-31047",
+          "source": {
+            "name": "NVD",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-31047"
+          }
+        },
+        {
+          "id": "PYSEC-2023-61",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/PYSEC-2023-61"
+          }
+        }
+      ],
+      "ratings": [
+        {
+          "severity": "critical",
+          "score": 9.8,
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+        }
+      ],
+      "recommendation": "Upgrade to 3.2.19 or 4.1.9 or 4.2.1",
+      "published": "2023-05-07T03:30:17Z"
+    },
+    {
+      "bom-ref": "GHSA-rrqc-c2jx-6jgv@pkg:pypi/django@3.2.0",
+      "id": "GHSA-rrqc-c2jx-6jgv",
+      "source": {
+        "name": "OSV",
+        "url": "https://osv.dev/vulnerability/GHSA-rrqc-c2jx-6jgv"
+      },
+      "description": "Django allows enumeration of user e-mail addresses",
+      "affects": [
+        {
+          "ref": "pkg:pypi/django@3.2.0"
+        }
+      ],
+      "references": [
+        {
+          "id": "BIT-django-2024-45231",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/BIT-django-2024-45231"
+          }
+        },
+        {
+          "id": "CVE-2024-45231",
+          "source": {
+            "name": "NVD",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-45231"
+          }
+        },
+        {
+          "id": "PYSEC-2026-1297",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/PYSEC-2026-1297"
+          }
+        }
+      ],
+      "ratings": [
+        {
+          "severity": "low",
+          "score": 3.7,
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:N/A:N"
+        }
+      ],
+      "recommendation": "Upgrade to 5.1.1 or 5.0.9 or 4.2.16",
+      "published": "2024-10-08T18:33:13Z"
+    },
+    {
+      "bom-ref": "GHSA-rxjp-mfm9-w4wr@pkg:pypi/django@3.2.0",
+      "id": "GHSA-rxjp-mfm9-w4wr",
+      "source": {
+        "name": "OSV",
+        "url": "https://osv.dev/vulnerability/GHSA-rxjp-mfm9-w4wr"
+      },
+      "description": "Path Traversal in Django",
+      "affects": [
+        {
+          "ref": "pkg:pypi/django@3.2.0"
+        }
+      ],
+      "references": [
+        {
+          "id": "BIT-django-2021-31542",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/BIT-django-2021-31542"
+          }
+        },
+        {
+          "id": "CVE-2021-31542",
+          "source": {
+            "name": "NVD",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-31542"
+          }
+        },
+        {
+          "id": "PYSEC-2021-7",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/PYSEC-2021-7"
+          }
+        }
+      ],
+      "ratings": [
+        {
+          "severity": "high",
+          "score": 7.5,
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N"
+        }
+      ],
+      "recommendation": "Upgrade to 2.2.21 or 3.1.9 or 3.2.1",
+      "published": "2021-06-04T21:15:56Z"
+    },
+    {
+      "bom-ref": "GHSA-v6rh-hp5x-86rv@pkg:pypi/django@3.2.0",
+      "id": "GHSA-v6rh-hp5x-86rv",
+      "source": {
+        "name": "OSV",
+        "url": "https://osv.dev/vulnerability/GHSA-v6rh-hp5x-86rv"
+      },
+      "description": "Potential bypass of an upstream access control based on URL paths in Django",
+      "affects": [
+        {
+          "ref": "pkg:pypi/django@3.2.0"
+        }
+      ],
+      "references": [
+        {
+          "id": "BIT-django-2021-44420",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/BIT-django-2021-44420"
+          }
+        },
+        {
+          "id": "CVE-2021-44420",
+          "source": {
+            "name": "NVD",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-44420"
+          }
+        },
+        {
+          "id": "PYSEC-2021-439",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/PYSEC-2021-439"
+          }
+        }
+      ],
+      "ratings": [
+        {
+          "severity": "high",
+          "score": 7.3,
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:L"
+        }
+      ],
+      "recommendation": "Upgrade to 2.2.25 or 3.1.14 or 3.2.10",
+      "published": "2021-12-09T19:09:37Z"
+    },
+    {
+      "bom-ref": "GHSA-vm8q-m57g-pff3@pkg:pypi/django@3.2.0",
+      "id": "GHSA-vm8q-m57g-pff3",
+      "source": {
+        "name": "OSV",
+        "url": "https://osv.dev/vulnerability/GHSA-vm8q-m57g-pff3"
+      },
+      "description": "Regular expression denial-of-service in Django",
+      "affects": [
+        {
+          "ref": "pkg:pypi/django@3.2.0"
+        }
+      ],
+      "references": [
+        {
+          "id": "BIT-django-2024-27351",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/BIT-django-2024-27351"
+          }
+        },
+        {
+          "id": "CVE-2024-27351",
+          "source": {
+            "name": "NVD",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-27351"
+          }
+        },
+        {
+          "id": "PYSEC-2024-47",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/PYSEC-2024-47"
+          }
+        }
+      ],
+      "ratings": [
+        {
+          "severity": "medium",
+          "score": 5.3,
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:N/I:N/A:H"
+        }
+      ],
+      "recommendation": "Upgrade to 3.2.25 or 4.2.11 or 5.0.3",
+      "published": "2024-03-15T21:30:43Z"
+    },
+    {
+      "bom-ref": "GHSA-w24h-v9qh-8gxj@pkg:pypi/django@3.2.0",
+      "id": "GHSA-w24h-v9qh-8gxj",
+      "source": {
+        "name": "OSV",
+        "url": "https://osv.dev/vulnerability/GHSA-w24h-v9qh-8gxj"
+      },
+      "description": "SQL Injection in Django",
+      "affects": [
+        {
+          "ref": "pkg:pypi/django@3.2.0"
+        }
+      ],
+      "references": [
+        {
+          "id": "BIT-django-2022-28347",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/BIT-django-2022-28347"
+          }
+        },
+        {
+          "id": "CVE-2022-28347",
+          "source": {
+            "name": "NVD",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2022-28347"
+          }
+        },
+        {
+          "id": "PYSEC-2022-191",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/PYSEC-2022-191"
+          }
+        }
+      ],
+      "ratings": [
+        {
+          "severity": "critical",
+          "score": 9.8,
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+        }
+      ],
+      "recommendation": "Upgrade to 2.2.28 or 3.2.13 or 4.0.4",
+      "published": "2022-04-13T00:00:33Z"
+    },
+    {
+      "bom-ref": "GHSA-wvqv-fj8w-qmhm@pkg:pypi/django@3.2.0",
+      "id": "GHSA-wvqv-fj8w-qmhm",
+      "source": {
+        "name": "OSV",
+        "url": "https://osv.dev/vulnerability/GHSA-wvqv-fj8w-qmhm"
+      },
+      "description": "Django GeoDjango spatial lookups allow file writes and outbound requests through GDAL raster parsing",
+      "affects": [
+        {
+          "ref": "pkg:pypi/django@3.2.0"
+        }
+      ],
+      "references": [
+        {
+          "id": "BIT-django-2026-15307",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/BIT-django-2026-15307"
+          }
+        },
+        {
+          "id": "CVE-2026-15307",
+          "source": {
+            "name": "NVD",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-15307"
+          }
+        },
+        {
+          "id": "PYSEC-2026-4035",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/PYSEC-2026-4035"
+          }
+        }
+      ],
+      "ratings": [
+        {
+          "severity": "high",
+          "score": 8.8,
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H"
+        }
+      ],
+      "recommendation": "Upgrade to 5.2.17 or 6.0.8",
+      "published": "2026-08-04T18:31:27Z"
+    },
+    {
+      "bom-ref": "GHSA-xpfp-f569-q3p2@pkg:pypi/django@3.2.0",
+      "id": "GHSA-xpfp-f569-q3p2",
+      "source": {
+        "name": "OSV",
+        "url": "https://osv.dev/vulnerability/GHSA-xpfp-f569-q3p2"
+      },
+      "description": "SQL Injection in Django",
+      "affects": [
+        {
+          "ref": "pkg:pypi/django@3.2.0"
+        }
+      ],
+      "references": [
+        {
+          "id": "BIT-django-2021-35042",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/BIT-django-2021-35042"
+          }
+        },
+        {
+          "id": "CVE-2021-35042",
+          "source": {
+            "name": "NVD",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-35042"
+          }
+        },
+        {
+          "id": "PYSEC-2021-109",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/PYSEC-2021-109"
+          }
+        }
+      ],
+      "ratings": [
+        {
+          "severity": "critical",
+          "score": 9.8,
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+        }
+      ],
+      "recommendation": "Upgrade to 3.2.5 or 3.1.13",
+      "published": "2021-09-22T17:34:49Z"
+    },
+    {
+      "bom-ref": "GHSA-xxj9-f6rv-m3x4@pkg:pypi/django@3.2.0",
+      "id": "GHSA-xxj9-f6rv-m3x4",
+      "source": {
+        "name": "OSV",
+        "url": "https://osv.dev/vulnerability/GHSA-xxj9-f6rv-m3x4"
+      },
+      "description": "Django denial-of-service attack in the intcomma template filter",
+      "affects": [
+        {
+          "ref": "pkg:pypi/django@3.2.0"
+        }
+      ],
+      "references": [
+        {
+          "id": "BIT-django-2024-24680",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/BIT-django-2024-24680"
+          }
+        },
+        {
+          "id": "CVE-2024-24680",
+          "source": {
+            "name": "NVD",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-24680"
+          }
+        },
+        {
+          "id": "PYSEC-2024-28",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/PYSEC-2024-28"
+          }
+        }
+      ],
+      "ratings": [
+        {
+          "severity": "medium",
+          "score": 5.9,
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        }
+      ],
+      "recommendation": "Upgrade to 3.2.24 or 4.2.10 or 5.0.2",
+      "published": "2024-02-07T00:30:25Z"
+    },
+    {
+      "bom-ref": "GHSA-8q59-q68h-6hv4@pkg:pypi/pyyaml@5.3.1",
+      "id": "GHSA-8q59-q68h-6hv4",
+      "source": {
+        "name": "OSV",
+        "url": "https://osv.dev/vulnerability/GHSA-8q59-q68h-6hv4"
+      },
+      "description": "Improper Input Validation in PyYAML",
+      "affects": [
+        {
+          "ref": "pkg:pypi/pyyaml@5.3.1"
+        }
+      ],
+      "references": [
+        {
+          "id": "CVE-2020-14343",
+          "source": {
+            "name": "NVD",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2020-14343"
+          }
+        },
+        {
+          "id": "PYSEC-2021-142",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/PYSEC-2021-142"
+          }
+        }
+      ],
+      "ratings": [
+        {
+          "severity": "critical",
+          "score": 9.8,
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+        }
+      ],
+      "recommendation": "Upgrade to 5.4",
+      "published": "2021-03-25T21:26:26Z"
+    },
+    {
+      "bom-ref": "GHSA-2xpw-w6gg-jr37@pkg:pypi/urllib3@1.26.4",
+      "id": "GHSA-2xpw-w6gg-jr37",
+      "source": {
+        "name": "OSV",
+        "url": "https://osv.dev/vulnerability/GHSA-2xpw-w6gg-jr37"
+      },
+      "description": "urllib3 streaming API improperly handles highly compressed data",
+      "affects": [
+        {
+          "ref": "pkg:pypi/urllib3@1.26.4"
+        }
+      ],
+      "references": [
+        {
+          "id": "CVE-2025-66471",
+          "source": {
+            "name": "NVD",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-66471"
+          }
+        },
+        {
+          "id": "PYSEC-2026-1994",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/PYSEC-2026-1994"
+          }
+        }
+      ],
+      "ratings": [
+        {
+          "severity": "high"
+        }
+      ],
+      "recommendation": "Upgrade to 2.6.0",
+      "published": "2025-12-05T18:15:54Z"
+    },
+    {
+      "bom-ref": "GHSA-34jh-p97f-mpxf@pkg:pypi/urllib3@1.26.4",
+      "id": "GHSA-34jh-p97f-mpxf",
+      "source": {
+        "name": "OSV",
+        "url": "https://osv.dev/vulnerability/GHSA-34jh-p97f-mpxf"
+      },
+      "description": "urllib3's Proxy-Authorization request header isn't stripped during cross-origin redirects",
+      "affects": [
+        {
+          "ref": "pkg:pypi/urllib3@1.26.4"
+        }
+      ],
+      "references": [
+        {
+          "id": "CVE-2024-37891",
+          "source": {
+            "name": "NVD",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-37891"
+          }
+        },
+        {
+          "id": "PYSEC-2026-1995",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/PYSEC-2026-1995"
+          }
+        }
+      ],
+      "ratings": [
+        {
+          "severity": "medium",
+          "score": 4.4,
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:H/UI:N/S:U/C:H/I:N/A:N"
+        }
+      ],
+      "recommendation": "Upgrade to 1.26.19 or 2.2.2",
+      "published": "2024-06-17T21:37:20Z"
+    },
+    {
+      "bom-ref": "GHSA-38jv-5279-wg99@pkg:pypi/urllib3@1.26.4",
+      "id": "GHSA-38jv-5279-wg99",
+      "source": {
+        "name": "OSV",
+        "url": "https://osv.dev/vulnerability/GHSA-38jv-5279-wg99"
+      },
+      "description": "Decompression-bomb safeguards bypassed when following HTTP redirects (streaming API)",
+      "affects": [
+        {
+          "ref": "pkg:pypi/urllib3@1.26.4"
+        }
+      ],
+      "references": [
+        {
+          "id": "CVE-2026-21441",
+          "source": {
+            "name": "NVD",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-21441"
+          }
+        },
+        {
+          "id": "PYSEC-2026-1996",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/PYSEC-2026-1996"
+          }
+        }
+      ],
+      "ratings": [
+        {
+          "severity": "high",
+          "score": 7.5,
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        }
+      ],
+      "recommendation": "Upgrade to 2.6.3",
+      "published": "2026-01-07T19:18:14Z"
+    },
+    {
+      "bom-ref": "GHSA-8988-9cw3-xx77@pkg:pypi/urllib3@1.26.4",
+      "id": "GHSA-8988-9cw3-xx77",
+      "source": {
+        "name": "OSV",
+        "url": "https://osv.dev/vulnerability/GHSA-8988-9cw3-xx77"
+      },
+      "description": "urllib3: HTTPS proxy TLS configuration may be ignored or overridden",
+      "affects": [
+        {
+          "ref": "pkg:pypi/urllib3@1.26.4"
+        }
+      ],
+      "references": [
+        {
+          "id": "CVE-2026-97687",
+          "source": {
+            "name": "NVD",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-97687"
+          }
+        },
+        {
+          "id": "PYSEC-2026-4175",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/PYSEC-2026-4175"
+          }
+        }
+      ],
+      "ratings": [
+        {
+          "severity": "high"
+        }
+      ],
+      "recommendation": "Upgrade to 2.8.0",
+      "published": "2026-09-30T14:46:04Z"
+    },
+    {
+      "bom-ref": "GHSA-g4mx-q9vg-27p4@pkg:pypi/urllib3@1.26.4",
+      "id": "GHSA-g4mx-q9vg-27p4",
+      "source": {
+        "name": "OSV",
+        "url": "https://osv.dev/vulnerability/GHSA-g4mx-q9vg-27p4"
+      },
+      "description": "urllib3's request body not stripped after redirect from 303 status changes request method to GET",
+      "affects": [
+        {
+          "ref": "pkg:pypi/urllib3@1.26.4"
+        }
+      ],
+      "references": [
+        {
+          "id": "CVE-2023-45803",
+          "source": {
+            "name": "NVD",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-45803"
+          }
+        },
+        {
+          "id": "PYSEC-2023-212",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/PYSEC-2023-212"
+          }
+        }
+      ],
+      "ratings": [
+        {
+          "severity": "medium",
+          "score": 4.2,
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:A/AC:H/PR:H/UI:N/S:U/C:H/I:N/A:N"
+        }
+      ],
+      "recommendation": "Upgrade to 2.0.7 or 1.26.18",
+      "published": "2023-10-17T20:15:25Z"
+    },
+    {
+      "bom-ref": "GHSA-gm62-xv2j-4w53@pkg:pypi/urllib3@1.26.4",
+      "id": "GHSA-gm62-xv2j-4w53",
+      "source": {
+        "name": "OSV",
+        "url": "https://osv.dev/vulnerability/GHSA-gm62-xv2j-4w53"
+      },
+      "description": "urllib3 allows an unbounded number of links in the decompression chain",
+      "affects": [
+        {
+          "ref": "pkg:pypi/urllib3@1.26.4"
+        }
+      ],
+      "references": [
+        {
+          "id": "CVE-2025-66418",
+          "source": {
+            "name": "NVD",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-66418"
+          }
+        },
+        {
+          "id": "PYSEC-2026-1998",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/PYSEC-2026-1998"
+          }
+        }
+      ],
+      "ratings": [
+        {
+          "severity": "high"
+        }
+      ],
+      "recommendation": "Upgrade to 2.6.0",
+      "published": "2025-12-05T18:15:19Z"
+    },
+    {
+      "bom-ref": "GHSA-pq67-6m6q-mj2v@pkg:pypi/urllib3@1.26.4",
+      "id": "GHSA-pq67-6m6q-mj2v",
+      "source": {
+        "name": "OSV",
+        "url": "https://osv.dev/vulnerability/GHSA-pq67-6m6q-mj2v"
+      },
+      "description": "urllib3 redirects are not disabled when retries are disabled on PoolManager instantiation",
+      "affects": [
+        {
+          "ref": "pkg:pypi/urllib3@1.26.4"
+        }
+      ],
+      "references": [
+        {
+          "id": "CVE-2025-50181",
+          "source": {
+            "name": "NVD",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-50181"
+          }
+        },
+        {
+          "id": "PYSEC-2026-1999",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/PYSEC-2026-1999"
+          }
+        }
+      ],
+      "ratings": [
+        {
+          "severity": "medium",
+          "score": 5.3,
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:U/C:H/I:N/A:N"
+        }
+      ],
+      "recommendation": "Upgrade to 2.5.0",
+      "published": "2025-06-18T17:50:00Z"
+    },
+    {
+      "bom-ref": "GHSA-q2q7-5pp4-w6pg@pkg:pypi/urllib3@1.26.4",
+      "id": "GHSA-q2q7-5pp4-w6pg",
+      "source": {
+        "name": "OSV",
+        "url": "https://osv.dev/vulnerability/GHSA-q2q7-5pp4-w6pg"
+      },
+      "description": "Catastrophic backtracking in URL authority parser when passed URL containing many @ characters",
+      "affects": [
+        {
+          "ref": "pkg:pypi/urllib3@1.26.4"
+        }
+      ],
+      "references": [
+        {
+          "id": "CVE-2021-33503",
+          "source": {
+            "name": "NVD",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-33503"
+          }
+        },
+        {
+          "id": "PYSEC-2021-108",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/PYSEC-2021-108"
+          }
+        }
+      ],
+      "ratings": [
+        {
+          "severity": "high",
+          "score": 7.5,
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        }
+      ],
+      "recommendation": "Upgrade to 1.26.5",
+      "published": "2021-06-01T21:19:32Z"
+    },
+    {
+      "bom-ref": "GHSA-qccp-gfcp-xxvc@pkg:pypi/urllib3@1.26.4",
+      "id": "GHSA-qccp-gfcp-xxvc",
+      "source": {
+        "name": "OSV",
+        "url": "https://osv.dev/vulnerability/GHSA-qccp-gfcp-xxvc"
+      },
+      "description": "urllib3: Sensitive headers forwarded across origins in proxied low-level redirects",
+      "affects": [
+        {
+          "ref": "pkg:pypi/urllib3@1.26.4"
+        }
+      ],
+      "references": [
+        {
+          "id": "CVE-2026-44431",
+          "source": {
+            "name": "NVD",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-44431"
+          }
+        },
+        {
+          "id": "PYSEC-2026-141",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/PYSEC-2026-141"
+          }
+        }
+      ],
+      "ratings": [
+        {
+          "severity": "medium",
+          "score": 5.3,
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N"
+        }
+      ],
+      "recommendation": "Upgrade to 2.7.0",
+      "published": "2026-05-11T14:51:20Z"
+    },
+    {
+      "bom-ref": "GHSA-v845-jxx5-vc9f@pkg:pypi/urllib3@1.26.4",
+      "id": "GHSA-v845-jxx5-vc9f",
+      "source": {
+        "name": "OSV",
+        "url": "https://osv.dev/vulnerability/GHSA-v845-jxx5-vc9f"
+      },
+      "description": "`Cookie` HTTP header isn't stripped on cross-origin redirects",
+      "affects": [
+        {
+          "ref": "pkg:pypi/urllib3@1.26.4"
+        }
+      ],
+      "references": [
+        {
+          "id": "CVE-2023-43804",
+          "source": {
+            "name": "NVD",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-43804"
+          }
+        },
+        {
+          "id": "PYSEC-2023-192",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/PYSEC-2023-192"
+          }
+        }
+      ],
+      "ratings": [
+        {
+          "severity": "medium",
+          "score": 5.9,
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:H/UI:N/S:U/C:H/I:H/A:N"
+        }
+      ],
+      "recommendation": "Upgrade to 2.0.6 or 1.26.17",
+      "published": "2023-10-02T23:27:05Z"
+    },
+    {
+      "bom-ref": "GHSA-vxq7-64xx-v4gw@pkg:pypi/urllib3@1.26.4",
+      "id": "GHSA-vxq7-64xx-v4gw",
+      "source": {
+        "name": "OSV",
+        "url": "https://osv.dev/vulnerability/GHSA-vxq7-64xx-v4gw"
+      },
+      "description": "urllib3: HTTPResponse.stream()/read_chunked() buffers an unbounded chunk-size line into memory",
+      "affects": [
+        {
+          "ref": "pkg:pypi/urllib3@1.26.4"
+        }
+      ],
+      "references": [
+        {
+          "id": "CVE-2026-97689",
+          "source": {
+            "name": "NVD",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-97689"
+          }
+        },
+        {
+          "id": "PYSEC-2026-4177",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/PYSEC-2026-4177"
+          }
+        }
+      ],
+      "ratings": [
+        {
+          "severity": "high"
+        }
+      ],
+      "recommendation": "Upgrade to 2.8.0",
+      "published": "2026-09-30T14:46:18Z"
+    },
+    {
+      "bom-ref": "GHSA-6w46-j5rx-g56g@pkg:pypi/pytest@7.0.0",
+      "id": "GHSA-6w46-j5rx-g56g",
+      "source": {
+        "name": "OSV",
+        "url": "https://osv.dev/vulnerability/GHSA-6w46-j5rx-g56g"
+      },
+      "description": "pytest has vulnerable tmpdir handling",
+      "affects": [
+        {
+          "ref": "pkg:pypi/pytest@7.0.0"
+        }
+      ],
+      "references": [
+        {
+          "id": "CVE-2025-71176",
+          "source": {
+            "name": "NVD",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-71176"
+          }
+        },
+        {
+          "id": "PYSEC-2026-1845",
+          "source": {
+            "name": "OSV",
+            "url": "https://osv.dev/vulnerability/PYSEC-2026-1845"
+          }
+        }
+      ],
+      "ratings": [
+        {
+          "severity": "medium",
+          "score": 6.8,
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:C/C:L/I:L/A:L"
+        }
+      ],
+      "recommendation": "Upgrade to 9.0.3",
+      "published": "2026-01-22T06:30:29Z"
+    }
+  ]
+}

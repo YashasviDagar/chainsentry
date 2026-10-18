@@ -13,7 +13,7 @@ Design decisions
 
   ====  ===========================================================
   0     success / no risk above threshold
-  1     risk threshold exceeded (Phase 5)
+  1     risk threshold exceeded (``--fail-on`` / ``--min-score``)
   2     usage error, unreadable or invalid input
   ====  ===========================================================
 
@@ -32,19 +32,25 @@ from __future__ import annotations
 
 import argparse
 from collections.abc import Sequence
+from pathlib import Path
 
 from rich.console import Console
 from rich.markup import escape
 from rich.table import Table
 
 from chainsentry import __version__, config
-from chainsentry.models import Dependency
+from chainsentry.models import Dependency, ScanResult, Severity
 from chainsentry.parsers import ParseError, ParseResult, parse_project
+from chainsentry.reporters import cyclonedx, json_report, markdown
 from chainsentry.reporters import table as table_reporter
 from chainsentry.scanner import CACHE_FILE, ScanOptions, open_cache, scan
+from chainsentry.scoring import policy_violations
 
 #: Check names accepted by --skip.
 CHECK_NAMES = ("osv", "typosquat", "health")
+#: --format value -> file name written into --output-dir ("table" prints instead).
+OUTPUT_FILES = {"json": "report.json", "sbom": "sbom.cdx.json", "markdown": "report.md"}
+FAIL_ON_CHOICES = ("none", "low", "medium", "high", "critical")
 
 EXIT_OK = 0
 EXIT_RISK = 1
@@ -141,6 +147,37 @@ def _add_scan_arguments(cmd: argparse.ArgumentParser) -> None:
     )
     cmd.add_argument("--no-cache", action="store_true", help="do not read or write the HTTP cache")
 
+    out = cmd.add_argument_group("output and CI gating")
+    out.add_argument(
+        "-f",
+        "--format",
+        action="append",
+        choices=("table", *OUTPUT_FILES),
+        help="output format; repeatable (default: table). json/sbom/markdown are written to "
+        "--output-dir",
+    )
+    out.add_argument(
+        "-o",
+        "--output-dir",
+        default="chainsentry-report",
+        help="directory for report files (default: ./chainsentry-report)",
+    )
+    out.add_argument(
+        "--fail-on",
+        choices=FAIL_ON_CHOICES,
+        default="critical",
+        help="exit with code 1 if any package is rated at this level or worse (default: critical)",
+    )
+    out.add_argument(
+        "--min-score",
+        type=int,
+        metavar="N",
+        help="also exit with code 1 if the project risk score is N or higher",
+    )
+    out.add_argument(
+        "--details", action="store_true", help="show every vulnerability and finding message"
+    )
+
 
 def main(argv: Sequence[str] | None = None) -> int:
     """Entry point used by the ``chainsentry`` console script.
@@ -189,8 +226,41 @@ def _cmd_scan(args: argparse.Namespace, console: Console) -> int:
     except ParseError as exc:
         console.print(f"[bold red]error:[/] {escape(str(exc))}")
         return EXIT_ERROR
-    table_reporter.render(result, console)
+
+    fail_on = None if args.fail_on == "none" else Severity(args.fail_on.upper())
+    reasons = policy_violations(result, fail_on=fail_on, min_score=args.min_score)
+
+    formats = args.format or ["table"]
+    if "table" in formats:
+        table_reporter.render(result, console, details=args.details)
+    for path in write_reports(result, formats, Path(args.output_dir), reasons):
+        console.print(f"[dim]wrote {escape(str(path))}[/]")
+
+    if reasons:
+        for reason in reasons:
+            console.print(f"[bold red]FAIL:[/] {escape(reason)}")
+        return EXIT_RISK
     return EXIT_OK
+
+
+def write_reports(
+    result: ScanResult, formats: Sequence[str], output_dir: Path, reasons: list[str]
+) -> list[Path]:
+    """Write every requested file format into ``output_dir``; returns the paths written."""
+    written: list[Path] = []
+    for fmt in dict.fromkeys(formats):  # de-duplicate, keep order
+        if fmt not in OUTPUT_FILES:
+            continue
+        path = output_dir / OUTPUT_FILES[fmt]
+        path.parent.mkdir(parents=True, exist_ok=True)
+        if fmt == "json":
+            json_report.write(result, path)
+        elif fmt == "sbom":
+            cyclonedx.write(result, path)
+        else:
+            path.write_text(markdown.render(result, failed_reasons=reasons), encoding="utf-8")
+        written.append(path)
+    return written
 
 
 def _cmd_cache(args: argparse.Namespace, console: Console) -> int:
