@@ -114,11 +114,13 @@ chainsentry/
 │   │   ├── client.py           # httpx client: timeouts, retries, backoff, User-Agent
 │   │   └── cache.py            # SQLite TTL cache
 │   ├── parsers/
-│   │   ├── base.py             # Parser protocol, registry, auto-detection
+│   │   ├── base.py             # ParseResult, ParseError, safe file reading, finding codes
+│   │   ├── discovery.py        # finds manifests in a folder, dispatches to parsers
+│   │   ├── npm_common.py       # npm spec classification + name validation
 │   │   ├── npm_package_json.py
-│   │   ├── npm_lockfile.py     # lockfileVersion 1, 2 and 3
+│   │   ├── npm_lockfile.py     # lockfileVersion 1, 2 and 3 (+ npm-shrinkwrap.json)
 │   │   ├── pip_requirements.py
-│   │   └── npm_semver.py       # small npm range matcher (^, ~, x, ||, >=…)
+│   │   └── npm_semver.py       # Phase 2: small npm range matcher for --resolve
 │   ├── checks/
 │   │   ├── base.py             # Check protocol
 │   │   ├── osv.py              # OSV batch query + vuln detail fetch
@@ -193,7 +195,7 @@ class Ecosystem(StrEnum):           # values match OSV's ecosystem names exactly
 
 @dataclass(frozen=True)
 class Dependency:
-    name: str                       # normalised (PEP 503 for PyPI, lowercase for npm)
+    name: str                       # PEP 503-normalised for PyPI; npm kept as-is (legacy names like JSONStream are case-sensitive)
     version: str | None             # exact version if known, else None
     spec: str | None                # original constraint, e.g. "^4.17.0" or ">=2.0"
     ecosystem: Ecosystem
@@ -257,15 +259,20 @@ Each phase ends with: summary · design rationale · interview questions · "tes
 * Mark `direct=True` for names that appear in the root package's dependency lists.
 * Flag `resolved` URLs not on `registry.npmjs.org` and entries missing `integrity`.
 
-**Auto-detection** (`base.py`): given a directory, find supported files (non-recursive by default, `--recursive` skips `node_modules/`, `.venv/`, `.git/`). If both `package.json` and `package-lock.json` exist, the lockfile wins for versions and `package.json` supplies `direct`.
+**Parsers are plain functions** (`parse_requirements`, `parse_package_json`, `parse_npm_lockfile`) — they hold no state, so a class hierarchy would add nothing.
 
-**Safety:** files are only *read and parsed* (`json.loads`, line parsing) — nothing is executed, nothing is installed. Files over 50 MB are refused.
+**Auto-detection** (`discovery.py`): given a directory, find supported files (non-recursive by default, `--recursive` skips `node_modules/`, `.venv/`, `.git/`). If both `package.json` and `package-lock.json` exist, the lockfile wins (`npm-shrinkwrap.json` > `package-lock.json` > `package.json`). v2/v3 lockfiles carry the root manifest themselves; for v1 the sibling `package.json` supplies `direct`. Production requirements files are parsed before dev ones so `-r requirements.txt` inside a dev file cannot mark production packages as dev.
+
+**CLI:** `chainsentry deps [PATH] [--recursive] [--direct-only] [--no-dev]` lists what was found (no network) — the hands-on way to test this phase.
+
+**Safety:** credentials inside index / `resolved` URLs are redacted before they reach any output; JSON nested absurdly deep becomes a `ParseError` instead of a crash; files are only *read and parsed* (`json.loads`, line parsing) — nothing is executed, nothing is installed. Files over 50 MB are refused.
 
 **Tests:** fixture files for each lockfile version, tricky requirements lines, scoped packages, aliases, broken JSON (clear error, no traceback).
 
 📚 Study: semantic versioning & npm ranges, PEP 440/503/508, why lockfiles matter for reproducibility and security, direct vs transitive dependencies.
 
 ### Phase 2 — OSV vulnerability lookup + HTTP/cache layer
+**Also in this phase:** `parsers/npm_semver.py` + `--resolve`, which turns an unpinned range into the newest matching registry version (needs the network, hence here and not in Phase 1). `models.py` gains `Vulnerability`; `PackageReport`/`ScanResult` arrive in Phase 5 — the model grows only when something uses it.
 **net/client.py**: one shared `httpx.Client` with connect/read timeouts, a descriptive `User-Agent`, retries with exponential backoff on 429/5xx/connection errors (respecting `Retry-After`), and safe URL-encoding of package names (a name like `../../x` must never change the request path).
 
 **net/cache.py**: SQLite table `(key TEXT PRIMARY KEY, value BLOB, expires_at REAL)`; key = SHA-256 of method + URL + body. TTLs: OSV query results 6 h, vulnerability details 24 h, registry metadata 24 h. Location: `%LOCALAPPDATA%\chainsentry` on Windows / `~/.cache/chainsentry` elsewhere, overridable with `CHAINSENTRY_CACHE_DIR`. Flags: `--no-cache`, `chainsentry cache clear`.

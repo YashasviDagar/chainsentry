@@ -1,0 +1,15 @@
+{
+  "name": "chainsentry-demo",
+  "version": "1.0.0",
+  "description": "Deliberately risky demo project used by ChainSentry's tests and README.",
+  "private": true,
+  "dependencies": {
+    "express": "^4.17.1",
+    "lodash": "4.17.15",
+    "my-utils": "npm:left-pad@1.3.0",
+    "internal-lib": "github:example-org/internal-lib#v1.0.0"
+  },
+  "devDependencies": {
+    "minimist": "1.2.5"
+  }
+}
