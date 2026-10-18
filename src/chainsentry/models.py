@@ -10,9 +10,9 @@ Design decisions
 * **Enums for closed sets of values** (ecosystems, severities) so a typo
   such as ``"pypi"`` vs ``"PyPI"`` is caught immediately instead of
   silently producing zero OSV results.
-* **The model grows with the phases.** ``Vulnerability`` arrives in
-  Phase 2 and ``PackageReport`` / ``ScanResult`` in Phase 5, so this file
-  never contains code that nothing uses yet.
+* **The model grows with the phases.** ``Vulnerability``,
+  ``PackageReport`` and ``ScanResult`` arrived in Phase 2 with the scanner;
+  risk scores are added in Phase 5.
 """
 
 from __future__ import annotations
@@ -165,3 +165,83 @@ class Finding:
     severity: Severity
     message: str
     details: dict[str, Any] = field(default_factory=dict)
+
+
+@dataclass
+class Vulnerability:
+    """A known vulnerability affecting one dependency (from OSV.dev).
+
+    Attributes:
+        id: OSV identifier - ``GHSA-...`` (GitHub advisory), ``PYSEC-...``
+            (PyPI advisory DB), ``CVE-...``, ``MAL-...`` (malicious package).
+        aliases: Other IDs for the same issue, e.g. ``["CVE-2021-23337"]``.
+        summary: One-line description.
+        severity: Qualitative rating (from the CVSS score when available).
+        cvss_score: CVSS v3 base score 0.0-10.0, if a v3 vector was published.
+        cvss_vector: The raw vector string, e.g. ``CVSS:3.1/AV:N/AC:L/...``.
+        affected_ranges: Human-readable ranges, e.g. ``[">=4.0.0, <4.17.21"]``.
+        fixed_versions: Versions that contain the fix (upgrade targets).
+        references: Advisory / patch URLs.
+        published: ISO-8601 publication date, if known.
+    """
+
+    id: str
+    summary: str
+    severity: Severity
+    aliases: list[str] = field(default_factory=list)
+    cvss_score: float | None = None
+    cvss_vector: str | None = None
+    affected_ranges: list[str] = field(default_factory=list)
+    fixed_versions: list[str] = field(default_factory=list)
+    references: list[str] = field(default_factory=list)
+    published: str | None = None
+
+    @property
+    def cve_ids(self) -> list[str]:
+        """The CVE identifiers among ``id`` and ``aliases``."""
+        return [i for i in [self.id, *self.aliases] if i.startswith("CVE-")]
+
+    @property
+    def is_malicious(self) -> bool:
+        """OSV ``MAL-`` entries describe packages that are malware, not bugs."""
+        return self.id.startswith("MAL-") or any(a.startswith("MAL-") for a in self.aliases)
+
+
+@dataclass
+class PackageReport:
+    """Everything ChainSentry learned about one dependency.
+
+    Checks *add* to ``findings`` / ``vulnerabilities``; the scorer (Phase 5)
+    then sets ``score`` and ``band``.
+    """
+
+    dependency: Dependency
+    findings: list[Finding] = field(default_factory=list)
+    vulnerabilities: list[Vulnerability] = field(default_factory=list)
+    #: True when the version was resolved from a range by ``--resolve``
+    #: (i.e. "what would be installed today", not what is locked).
+    resolved: bool = False
+
+    def add_finding(self, finding: Finding) -> None:
+        """Append ``finding`` unless an identical one (same code+message) exists."""
+        if not any(f.code == finding.code and f.message == finding.message for f in self.findings):
+            self.findings.append(finding)
+
+
+@dataclass
+class ScanResult:
+    """The outcome of scanning one project - the input to every reporter."""
+
+    target: str
+    packages: list[PackageReport]
+    files: list[str] = field(default_factory=list)
+    #: Non-fatal notes from parsing (skipped lines, risky pip options...).
+    warnings: list[str] = field(default_factory=list)
+    #: Problems that made a check incomplete (e.g. "osv: HTTP 503").
+    errors: list[str] = field(default_factory=list)
+    #: Names of the checks that ran, e.g. ["osv", "typosquat", "health"].
+    checks: list[str] = field(default_factory=list)
+    tool_version: str = ""
+    #: ISO-8601 UTC timestamp of when the scan started.
+    scanned_at: str = ""
+    duration_seconds: float = 0.0

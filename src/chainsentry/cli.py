@@ -20,8 +20,12 @@ Design decisions
 Commands
 --------
 ``chainsentry deps [PATH]``
-    Phase 1. Lists the dependencies ChainSentry found, without any network
-    lookups. Useful on its own for checking what will be scanned.
+    Lists the dependencies ChainSentry found, without any network lookups.
+    Useful on its own for checking what will be scanned.
+``chainsentry scan [PATH]``
+    Runs every check and prints the risk report.
+``chainsentry cache clear``
+    Empties the on-disk HTTP cache.
 """
 
 from __future__ import annotations
@@ -33,9 +37,14 @@ from rich.console import Console
 from rich.markup import escape
 from rich.table import Table
 
-from chainsentry import __version__
+from chainsentry import __version__, config
 from chainsentry.models import Dependency
 from chainsentry.parsers import ParseError, ParseResult, parse_project
+from chainsentry.reporters import table as table_reporter
+from chainsentry.scanner import CACHE_FILE, ScanOptions, open_cache, scan
+
+#: Check names accepted by --skip.
+CHECK_NAMES = ("osv",)
 
 EXIT_OK = 0
 EXIT_RISK = 1
@@ -74,7 +83,58 @@ def build_parser() -> argparse.ArgumentParser:
         help="hide transitive dependencies (lockfiles can list thousands)",
     )
     deps.add_argument("--no-dev", action="store_true", help="hide development-only dependencies")
+
+    scan_cmd = sub.add_parser(
+        "scan",
+        help="scan a project for vulnerable and risky dependencies",
+        description="Parse manifests, run every check and report the risks found.",
+    )
+    _add_scan_arguments(scan_cmd)
+
+    cache_cmd = sub.add_parser("cache", help="manage the local HTTP cache")
+    cache_sub = cache_cmd.add_subparsers(dest="cache_command", metavar="<action>", required=True)
+    cache_sub.add_parser("clear", help="delete every cached API response")
+    cache_sub.add_parser("path", help="print where the cache is stored")
     return parser
+
+
+def _add_scan_arguments(cmd: argparse.ArgumentParser) -> None:
+    """Flags of ``chainsentry scan`` (kept separate so the list stays readable)."""
+    cmd.add_argument(
+        "path",
+        nargs="?",
+        default=".",
+        help="project directory or a single manifest file (default: current directory)",
+    )
+    cmd.add_argument("-r", "--recursive", action="store_true", help="also search sub-directories")
+    cmd.add_argument(
+        "--include-dev", action="store_true", help="also scan development-only dependencies"
+    )
+    cmd.add_argument(
+        "--resolve",
+        action="store_true",
+        help="resolve version ranges to the newest matching release so they can be checked",
+    )
+    cmd.add_argument(
+        "--skip",
+        action="append",
+        default=[],
+        choices=CHECK_NAMES,
+        metavar="CHECK",
+        help=f"skip a check; repeatable ({', '.join(CHECK_NAMES)})",
+    )
+    cmd.add_argument(
+        "--exclude",
+        action="append",
+        default=[],
+        metavar="GLOB",
+        help="leave out packages whose name matches GLOB (e.g. '@mycorp/*'); "
+        "excluded names are never sent to public APIs",
+    )
+    cmd.add_argument(
+        "--offline", action="store_true", help="no network access; only offline checks run"
+    )
+    cmd.add_argument("--no-cache", action="store_true", help="do not read or write the HTTP cache")
 
 
 def main(argv: Sequence[str] | None = None) -> int:
@@ -92,9 +152,50 @@ def main(argv: Sequence[str] | None = None) -> int:
 
     if args.command == "deps":
         return _cmd_deps(args, Console())
+    if args.command == "scan":
+        return _cmd_scan(args, Console())
+    if args.command == "cache":
+        return _cmd_cache(args, Console())
 
     # No sub-command given: show help rather than doing nothing silently.
     parser.print_help()
+    return EXIT_OK
+
+
+def options_from_args(args: argparse.Namespace) -> ScanOptions:
+    """Translate parsed CLI flags into :class:`ScanOptions`."""
+    return ScanOptions(
+        recursive=args.recursive,
+        include_dev=args.include_dev,
+        resolve=args.resolve,
+        offline=args.offline,
+        use_cache=not args.no_cache,
+        skip=frozenset(args.skip),
+        exclude=tuple(args.exclude),
+    )
+
+
+def _cmd_scan(args: argparse.Namespace, console: Console) -> int:
+    """Implementation of ``chainsentry scan``."""
+    try:
+        with console.status("Scanning dependencies...", spinner="dots"):
+            result = scan(args.path, options_from_args(args))
+    except ParseError as exc:
+        console.print(f"[bold red]error:[/] {escape(str(exc))}")
+        return EXIT_ERROR
+    table_reporter.render(result, console)
+    return EXIT_OK
+
+
+def _cmd_cache(args: argparse.Namespace, console: Console) -> int:
+    """Implementation of ``chainsentry cache clear|path``."""
+    if args.cache_command == "path":
+        console.print(str(config.cache_dir() / CACHE_FILE), markup=False, highlight=False)
+        return EXIT_OK
+    cache = open_cache(use_cache=True)
+    removed = cache.clear()
+    cache.close()
+    console.print(f"Removed {removed} cached response(s).")
     return EXIT_OK
 
 
@@ -104,7 +205,7 @@ def _cmd_deps(args: argparse.Namespace, console: Console) -> int:
         result = parse_project(args.path, recursive=args.recursive)
     except ParseError as exc:
         # Expected, user-facing failure: print one clear line, no traceback.
-        console.print(f"[bold red]error:[/] {exc}")
+        console.print(f"[bold red]error:[/] {escape(str(exc))}")
         return EXIT_ERROR
 
     deps = result.dependencies

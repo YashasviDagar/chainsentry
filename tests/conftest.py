@@ -51,3 +51,18 @@ def write_json(tmp_path: Path) -> Callable[[str, Any], Path]:
         return path
 
     return _write_json
+
+
+@pytest.fixture
+def client():
+    """An HttpClient with caching disabled and no real sleeping between retries.
+
+    HTTP itself is mocked per test with ``respx``; any request a test did not
+    mock raises an error, so no unit test can accidentally hit the network.
+    """
+    from chainsentry.net.cache import Cache
+    from chainsentry.net.client import HttpClient
+
+    http = HttpClient(Cache(None), sleep=lambda _seconds: None)
+    yield http
+    http.close()
