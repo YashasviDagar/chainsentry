@@ -1,0 +1,12 @@
+# Production dependencies for the ChainSentry demo project.
+# Deliberately includes risky patterns so every parser feature shows up.
+
+# SECURITY demo: an extra index enables dependency confusion.
+--extra-index-url https://deploy:s3cr3t-token@pypi.internal.example.com/simple
+
+Django==3.2.0                 # old release with known CVEs
+requests>=2.20                # range -> UNPINNED
+PyYAML==5.3.1 \
+    --hash=sha256:b8eac752c5e14d3eca0e6dd9199cd627518cb5ec06add0de9d32baeee6fe645d
+python_dateutil==2.8.2        # name gets PEP 503-normalised to python-dateutil
+urllib3[socks]==1.26.4 ; python_version >= "3.6"
