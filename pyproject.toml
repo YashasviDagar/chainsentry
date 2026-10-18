@@ -88,6 +88,10 @@ select = [
     "SIM",     # flake8-simplify
 ]
 
+# SIM108 (prefer ternary): an if/else block is often clearer for formulas,
+# e.g. the CVSS impact calculation - readability wins for a teaching project.
+ignore = ["SIM108"]
+
 [tool.ruff.lint.per-file-ignores]
 # `assert` is the whole point of pytest tests.
 "tests/**" = ["S101"]
