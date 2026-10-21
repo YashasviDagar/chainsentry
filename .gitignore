@@ -31,3 +31,6 @@ batch-results/
 
 # Local Claude Code / editor tooling
 .claude/
+
+# Personal interview study guide (never committed)
+PROJECT_GUIDE.md
